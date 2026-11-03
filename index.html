@@ -1,0 +1,1796 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistem Komputer - Informatika Kelas 8 Bab 4 | Media Pembelajaran Interaktif</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              200: '#c7d2fe',
+              300: '#a5b4fc',
+              400: '#818cf8',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              800: '#3730a3',
+              900: '#312e81',
+            },
+            techCyan: '#06b6d4',
+            techEmerald: '#10b981',
+            techAmber: '#f59e0b',
+            techRose: '#f43f5e',
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['Fira Code', 'Courier New', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Canvas Confetti for Quiz Victory -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col font-sans transition-colors duration-200">
+
+  <!-- ================= TOP NAVIGATION ================= -->
+  <header class="sticky top-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-sm transition-colors duration-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- Brand Logo & Title -->
+        <a href="#beranda" class="flex items-center space-x-3 group" onclick="switchTab('beranda')">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-primary-600 via-indigo-500 to-techCyan flex items-center justify-center text-white shadow-md shadow-indigo-500/20 group-hover:scale-105 transition-transform">
+            <i class="fa-solid fa-microchip text-xl"></i>
+          </div>
+          <div>
+            <div class="font-extrabold text-lg sm:text-xl tracking-tight bg-gradient-to-r from-primary-600 via-indigo-600 to-techCyan bg-clip-text text-transparent">
+              Informatika<span class="text-slate-700 dark:text-slate-200 font-semibold">SMP</span>
+            </div>
+            <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Kelas 8 • Bab 4: Sistem Komputer</p>
+          </div>
+        </a>
+
+        <!-- Desktop Navigation Tabs -->
+        <nav class="hidden md:flex items-center space-x-1 lg:space-x-2">
+          <button onclick="switchTab('beranda')" id="nav-beranda" class="nav-tab-btn active px-3 py-2 rounded-lg text-sm font-semibold transition-all flex items-center gap-2">
+            <i class="fa-solid fa-house"></i>
+            <span>Beranda</span>
+          </button>
+          <button onclick="switchTab('materi')" id="nav-materi" class="nav-tab-btn px-3 py-2 rounded-lg text-sm font-semibold transition-all flex items-center gap-2">
+            <i class="fa-solid fa-book-open"></i>
+            <span>Materi Lengkap</span>
+          </button>
+          <button onclick="switchTab('lab')" id="nav-lab" class="nav-tab-btn px-3 py-2 rounded-lg text-sm font-semibold transition-all flex items-center gap-2">
+            <i class="fa-solid fa-flask"></i>
+            <span>Lab Interaktif</span>
+            <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300">Hot!</span>
+          </button>
+          <button onclick="switchTab('kuis')" id="nav-kuis" class="nav-tab-btn px-3 py-2 rounded-lg text-sm font-semibold transition-all flex items-center gap-2">
+            <i class="fa-solid fa-gamepad"></i>
+            <span>Kuis & Asesmen</span>
+          </button>
+          <button onclick="switchTab('glosarium')" id="nav-glosarium" class="nav-tab-btn px-3 py-2 rounded-lg text-sm font-semibold transition-all flex items-center gap-2">
+            <i class="fa-solid fa-spell-check"></i>
+            <span>Glosarium</span>
+          </button>
+        </nav>
+
+        <!-- Right Utilities (Sound, Dark Mode, Mobile Menu) -->
+        <div class="flex items-center space-x-2">
+          <!-- Audio Sound Toggle -->
+          <button id="soundToggleBtn" onclick="toggleAudio()" title="Efek Suara (Aktif/Nonaktif)" class="w-9 h-9 rounded-lg flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors border border-slate-200 dark:border-slate-700">
+            <i id="soundIcon" class="fa-solid fa-volume-high text-sm text-indigo-600 dark:text-indigo-400"></i>
+          </button>
+
+          <!-- Dark/Light Theme Switcher -->
+          <button id="themeToggleBtn" onclick="toggleTheme()" title="Ubah Tema Gelap/Terang" class="w-9 h-9 rounded-lg flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors border border-slate-200 dark:border-slate-700">
+            <i id="themeIcon" class="fa-solid fa-moon text-sm"></i>
+          </button>
+
+          <!-- Print / Summary Download -->
+          <button onclick="printSummary()" title="Cetak / Simpan PDF Rangkuman" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-900 border border-indigo-200 dark:border-indigo-800 transition-colors">
+            <i class="fa-solid fa-print"></i>
+            <span>Cetak Materi</span>
+          </button>
+
+          <!-- Mobile Hamburger Toggle -->
+          <button id="mobileMenuBtn" onclick="toggleMobileMenu()" class="md:hidden w-9 h-9 rounded-lg flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+            <i class="fa-solid fa-bars text-base"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Dropdown Navigation -->
+    <div id="mobileMenu" class="hidden md:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 pt-2 pb-4 space-y-1 shadow-lg">
+      <button onclick="switchTab('beranda'); toggleMobileMenu();" class="w-full text-left px-3 py-2.5 rounded-lg text-sm font-semibold flex items-center gap-3 text-slate-700 dark:text-slate-200 hover:bg-indigo-50 dark:hover:bg-indigo-950">
+        <i class="fa-solid fa-house text-indigo-500 w-5"></i>
+        <span>Beranda</span>
+      </button>
+      <button onclick="switchTab('materi'); toggleMobileMenu();" class="w-full text-left px-3 py-2.5 rounded-lg text-sm font-semibold flex items-center gap-3 text-slate-700 dark:text-slate-200 hover:bg-indigo-50 dark:hover:bg-indigo-950">
+        <i class="fa-solid fa-book-open text-indigo-500 w-5"></i>
+        <span>Materi Pembelajaran</span>
+      </button>
+      <button onclick="switchTab('lab'); toggleMobileMenu();" class="w-full text-left px-3 py-2.5 rounded-lg text-sm font-semibold flex items-center gap-3 text-slate-700 dark:text-slate-200 hover:bg-indigo-50 dark:hover:bg-indigo-950">
+        <i class="fa-solid fa-flask text-indigo-500 w-5"></i>
+        <span>Lab Interaktif (Simulator)</span>
+      </button>
+      <button onclick="switchTab('kuis'); toggleMobileMenu();" class="w-full text-left px-3 py-2.5 rounded-lg text-sm font-semibold flex items-center gap-3 text-slate-700 dark:text-slate-200 hover:bg-indigo-50 dark:hover:bg-indigo-950">
+        <i class="fa-solid fa-gamepad text-indigo-500 w-5"></i>
+        <span>Kuis & Asesmen</span>
+      </button>
+      <button onclick="switchTab('glosarium'); toggleMobileMenu();" class="w-full text-left px-3 py-2.5 rounded-lg text-sm font-semibold flex items-center gap-3 text-slate-700 dark:text-slate-200 hover:bg-indigo-50 dark:hover:bg-indigo-950">
+        <i class="fa-solid fa-spell-check text-indigo-500 w-5"></i>
+        <span>Glosarium Istilah</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ================= MAIN CONTENT WRAPPER ================= -->
+  <main class="flex-grow">
+
+    <!-- ================= TAB 1: BERANDA ================= -->
+    <section id="tab-beranda" class="tab-pane active py-8 sm:py-12">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+        
+        <!-- Hero Banner -->
+        <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-900 via-indigo-800 to-slate-900 text-white p-6 sm:p-10 lg:p-14 shadow-2xl border border-indigo-700/50">
+          <!-- Background Glow Decors -->
+          <div class="absolute -right-20 -top-20 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none"></div>
+          <div class="absolute right-1/3 -bottom-20 w-80 h-80 bg-cyan-500/20 rounded-full blur-3xl pointer-events-none"></div>
+
+          <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <div class="lg:col-span-7 space-y-6">
+              <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-500/20 border border-indigo-400/30 text-indigo-200 text-xs font-semibold tracking-wide uppercase">
+                <i class="fa-solid fa-award text-amber-300"></i>
+                Kurikulum Merdeka • Fase D
+              </div>
+              <h1 class="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
+                Membongkar Rahasia <br>
+                <span class="bg-gradient-to-r from-cyan-300 via-sky-300 to-indigo-200 bg-clip-text text-transparent">Sistem Komputer</span>
+              </h1>
+              <p class="text-slate-300 text-base sm:text-lg leading-relaxed max-w-2xl">
+                Bagaimana sebuah komputer bisa berpikir, menjalankan game, mengetik dokumen, dan memahami instruksi kita? Mari pelajari anatomi perangkat keras, perangkat lunak, peran brainware, siklus CPU, hingga rahasia bahasa biner 0 dan 1!
+              </p>
+
+              <!-- Quick Action CTA Buttons -->
+              <div class="flex flex-wrap items-center gap-3 pt-2">
+                <button onclick="switchTab('materi')" class="px-6 py-3.5 rounded-xl font-bold text-sm bg-gradient-to-r from-indigo-500 to-techCyan text-white shadow-lg shadow-indigo-500/30 hover:scale-105 active:scale-95 transition-all flex items-center gap-2">
+                  <i class="fa-solid fa-book-open"></i>
+                  <span>Mulai Belajar Materi</span>
+                </button>
+                <button onclick="switchTab('lab')" class="px-5 py-3.5 rounded-xl font-bold text-sm bg-white/10 hover:bg-white/20 text-white backdrop-blur border border-white/20 hover:scale-105 active:scale-95 transition-all flex items-center gap-2">
+                  <i class="fa-solid fa-flask text-techCyan"></i>
+                  <span>Coba Simulator Interaktif</span>
+                </button>
+                <button onclick="switchTab('kuis')" class="px-5 py-3.5 rounded-xl font-bold text-sm bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold hover:scale-105 active:scale-95 transition-all flex items-center gap-2">
+                  <i class="fa-solid fa-trophy"></i>
+                  <span>Kuis Uji Nyali</span>
+                </button>
+              </div>
+
+              <!-- Quick Stats / Badges -->
+              <div class="grid grid-cols-3 gap-4 pt-4 border-t border-indigo-700/60 max-w-lg">
+                <div>
+                  <div class="text-2xl font-black text-cyan-400">5</div>
+                  <div class="text-xs text-slate-300">Sub-Materi Pokok</div>
+                </div>
+                <div>
+                  <div class="text-2xl font-black text-amber-400">3</div>
+                  <div class="text-xs text-slate-300">Lab & Simulasi</div>
+                </div>
+                <div>
+                  <div class="text-2xl font-black text-emerald-400">15</div>
+                  <div class="text-xs text-slate-300">Soal Uji Kompetensi</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Hero Graphic Illustration / System Showcase -->
+            <div class="lg:col-span-5 flex justify-center">
+              <div class="w-full max-w-sm p-6 rounded-2xl bg-slate-900/80 border border-indigo-500/30 shadow-2xl backdrop-blur relative space-y-4">
+                <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+                  <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-rose-500"></span>
+                    <span class="w-3 h-3 rounded-full bg-amber-500"></span>
+                    <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+                  </div>
+                  <span class="text-xs font-mono text-cyan-400 font-semibold">system_architecture.v8</span>
+                </div>
+                
+                <!-- Architecture Mini Diagram -->
+                <div class="space-y-3 font-mono text-xs">
+                  <div class="p-3 rounded-lg bg-indigo-950/60 border border-indigo-800/80 flex items-center justify-between">
+                    <span class="text-indigo-300"><i class="fa-solid fa-keyboard mr-2"></i>INPUT</span>
+                    <span class="text-slate-400 text-[11px]">Keyboard, Mouse, Mic</span>
+                  </div>
+                  <div class="text-center text-cyan-400 text-sm animate-bounce my-0.5">
+                    <i class="fa-solid fa-arrow-down"></i>
+                  </div>
+                  <div class="p-3.5 rounded-lg bg-slate-800/90 border border-cyan-500/50 shadow-md flex flex-col gap-1.5">
+                    <div class="flex items-center justify-between">
+                      <span class="font-bold text-cyan-300 flex items-center gap-2">
+                        <i class="fa-solid fa-microchip"></i> CPU & MEMORY
+                      </span>
+                      <span class="text-[10px] bg-cyan-900/60 text-cyan-200 px-2 py-0.5 rounded">Process</span>
+                    </div>
+                    <div class="text-[11px] text-slate-400 grid grid-cols-2 gap-1 mt-1">
+                      <div class="bg-slate-900/70 p-1.5 rounded text-center">ALU + CU</div>
+                      <div class="bg-slate-900/70 p-1.5 rounded text-center">RAM + Register</div>
+                    </div>
+                  </div>
+                  <div class="text-center text-cyan-400 text-sm animate-bounce my-0.5">
+                    <i class="fa-solid fa-arrow-down"></i>
+                  </div>
+                  <div class="grid grid-cols-2 gap-2">
+                    <div class="p-2.5 rounded-lg bg-emerald-950/60 border border-emerald-800/80 text-center">
+                      <div class="text-emerald-300 font-bold"><i class="fa-solid fa-desktop mr-1"></i> OUTPUT</div>
+                      <div class="text-[10px] text-slate-400">Layar / Cetak</div>
+                    </div>
+                    <div class="p-2.5 rounded-lg bg-amber-950/60 border border-amber-800/80 text-center">
+                      <div class="text-amber-300 font-bold"><i class="fa-solid fa-hard-drive mr-1"></i> STORAGE</div>
+                      <div class="text-[10px] text-slate-400">SSD / Cloud</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="text-center pt-2">
+                  <span class="text-[11px] text-indigo-300 italic">Siklus IPOS: Input ➔ Process ➔ Output ➔ Storage</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Capaian & Tujuan Pembelajaran (Kurikulum Merdeka) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Card CP -->
+          <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-lg">
+                <i class="fa-solid fa-graduation-cap"></i>
+              </div>
+              <div>
+                <h3 class="font-bold text-base sm:text-lg">Capaian Pembelajaran (CP)</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400">Elemen: Sistem Komputer (SK) Fase D</p>
+              </div>
+            </div>
+            <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-slate-700/60">
+              "Peserta didik mampu <strong class="text-indigo-600 dark:text-indigo-400">mendeskripsikan komponen, fungsi, dan cara kerja komputer</strong> yang membentuk sebuah sistem komputasi, serta menjelaskan proses dan penggunaan <strong class="text-indigo-600 dark:text-indigo-400">kodifikasi data biner</strong> untuk penyimpanan data di dalam memori komputer."
+            </p>
+          </div>
+
+          <!-- Card TP -->
+          <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-lg">
+                <i class="fa-solid fa-bullseye"></i>
+              </div>
+              <div>
+                <h3 class="font-bold text-base sm:text-lg">Tujuan Pembelajaran (TP)</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400">Target yang harus kamu kuasai di Bab ini</p>
+              </div>
+            </div>
+            <ul class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 space-y-2.5">
+              <li class="flex items-start gap-2">
+                <i class="fa-solid fa-circle-check text-emerald-500 mt-1 flex-shrink-0"></i>
+                <span>Mengidentifikasi 3 pilar sistem komputer: <strong>Hardware, Software, & Brainware</strong>.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <i class="fa-solid fa-circle-check text-emerald-500 mt-1 flex-shrink-0"></i>
+                <span>Mengelompokkan perangkat keras (Hardware) ke kategori Input, Process, Output, dan Storage.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <i class="fa-solid fa-circle-check text-emerald-500 mt-1 flex-shrink-0"></i>
+                <span>Memahami siklus kerja mesin CPU: <strong>Fetch, Decode, Execute, Store</strong>.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <i class="fa-solid fa-circle-check text-emerald-500 mt-1 flex-shrink-0"></i>
+                <span>Mengenal sistem <strong>Bilangan Biner (0 & 1)</strong> dan pengalamatan memori komputer.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Peta Konsep Bab 4 -->
+        <div class="space-y-6">
+          <div class="text-center max-w-xl mx-auto">
+            <h2 class="text-2xl font-bold tracking-tight">Peta Jelajah Belajar Bab 4</h2>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Pilih materi yang ingin kamu pelajari secara berurutan atau langsung eksplorasi!</p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <!-- Modul 1 -->
+            <div onclick="openSubMateri('sub1')" class="group cursor-pointer p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-indigo-500 dark:hover:border-indigo-400 shadow-sm hover:shadow-lg transition-all transform hover:-translate-y-1">
+              <div class="w-12 h-12 rounded-xl bg-indigo-100 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform">
+                <i class="fa-solid fa-cubes"></i>
+              </div>
+              <span class="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">Sub-Bab 1</span>
+              <h3 class="font-bold text-base text-slate-800 dark:text-slate-100 mt-1 group-hover:text-indigo-600 transition-colors">3 Pilar Sistem Komputer</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 line-clamp-2">Sinergi antara Hardware, Software, dan Brainware lengkap dengan foto & ilustrasi peran.</p>
+              <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold text-indigo-600 dark:text-indigo-400">
+                <span>Pelajari Materi</span>
+                <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+              </div>
+            </div>
+
+            <!-- Modul 2 -->
+            <div onclick="openSubMateri('sub2')" class="group cursor-pointer p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-techCyan dark:hover:border-techCyan shadow-sm hover:shadow-lg transition-all transform hover:-translate-y-1">
+              <div class="w-12 h-12 rounded-xl bg-cyan-100 dark:bg-cyan-950/80 text-cyan-600 dark:text-cyan-400 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform">
+                <i class="fa-solid fa-server"></i>
+              </div>
+              <span class="text-xs font-bold text-cyan-600 dark:text-cyan-400 uppercase tracking-wider">Sub-Bab 2</span>
+              <h3 class="font-bold text-base text-slate-800 dark:text-slate-100 mt-1 group-hover:text-cyan-600 transition-colors">Galeri Perangkat Keras</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 line-clamp-2">Eksplorasi foto nyata Input, CPU, RAM, GPU, Monitor, Printer, SSD, dan Flashdisk.</p>
+              <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold text-cyan-600 dark:text-cyan-400">
+                <span>Pelajari Materi</span>
+                <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+              </div>
+            </div>
+
+            <!-- Modul 3 -->
+            <div onclick="openSubMateri('sub3')" class="group cursor-pointer p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-techEmerald dark:hover:border-techEmerald shadow-sm hover:shadow-lg transition-all transform hover:-translate-y-1">
+              <div class="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-950/80 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform">
+                <i class="fa-solid fa-compact-disc"></i>
+              </div>
+              <span class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Sub-Bab 3</span>
+              <h3 class="font-bold text-base text-slate-800 dark:text-slate-100 mt-1 group-hover:text-emerald-600 transition-colors">Perangkat Lunak (Software)</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 line-clamp-2">Peran vital Sistem Operasi (OS), Aplikasi Office/Grafis, Bahasa Koding, dan Utilitas.</p>
+              <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+                <span>Pelajari Materi</span>
+                <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+              </div>
+            </div>
+
+            <!-- Modul 4 & 5 -->
+            <div onclick="openSubMateri('sub4')" class="group cursor-pointer p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-techAmber dark:hover:border-techAmber shadow-sm hover:shadow-lg transition-all transform hover:-translate-y-1">
+              <div class="w-12 h-12 rounded-xl bg-amber-100 dark:bg-amber-950/80 text-amber-600 dark:text-amber-400 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform">
+                <i class="fa-solid fa-microchip"></i>
+              </div>
+              <span class="text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider">Sub-Bab 4 & 5</span>
+              <h3 class="font-bold text-base text-slate-800 dark:text-slate-100 mt-1 group-hover:text-amber-600 transition-colors">Siklus CPU & Kode Biner</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 line-clamp-2">Memahami siklus Fetch-Decode-Execute dan bagaimana huruf disimpan sebagai biner 0 & 1.</p>
+              <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold text-amber-600 dark:text-amber-400">
+                <span>Pelajari Materi</span>
+                <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= TAB 2: MATERI LENGKAP ================= -->
+    <section id="tab-materi" class="tab-pane hidden py-8 sm:py-12">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        
+        <!-- Header Materi & Navigasi Sub-Bab -->
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">Modul Pembelajaran Interaktif</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight mt-0.5">Materi Sistem Komputer Lengkap</h2>
+            <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">Pilih sub-bab di bawah untuk mempelajari penjelasan, foto produk, dan ilustrasinya:</p>
+          </div>
+
+          <!-- Sub-Bab Segmented Control Buttons -->
+          <div class="flex flex-wrap items-center gap-1.5 p-1.5 bg-slate-100 dark:bg-slate-800/80 rounded-xl w-full md:w-auto">
+            <button onclick="openSubMateri('sub1')" id="btn-sub1" class="submateri-btn active px-3 py-2 rounded-lg text-xs font-bold transition-all">
+              1. Tiga Pilar
+            </button>
+            <button onclick="openSubMateri('sub2')" id="btn-sub2" class="submateri-btn px-3 py-2 rounded-lg text-xs font-bold transition-all">
+              2. Galeri Hardware
+            </button>
+            <button onclick="openSubMateri('sub3')" id="btn-sub3" class="submateri-btn px-3 py-2 rounded-lg text-xs font-bold transition-all">
+              3. Galeri Software
+            </button>
+            <button onclick="openSubMateri('sub4')" id="btn-sub4" class="submateri-btn px-3 py-2 rounded-lg text-xs font-bold transition-all">
+              4. Siklus CPU
+            </button>
+            <button onclick="openSubMateri('sub5')" id="btn-sub5" class="submateri-btn px-3 py-2 rounded-lg text-xs font-bold transition-all">
+              5. Bilangan Biner
+            </button>
+          </div>
+        </div>
+
+        <!-- ================= SUB-BAB 1: TIGA PILAR SISTEM KOMPUTER ================= -->
+        <div id="content-sub1" class="submateri-content space-y-8">
+          <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
+            <div class="border-b border-slate-100 dark:border-slate-800 pb-4">
+              <span class="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">Sub-Bab 1</span>
+              <h3 class="text-xl sm:text-2xl font-bold mt-1">Pengertian & 3 Pilar Utama Sistem Komputer</h3>
+            </div>
+
+            <div class="prose dark:prose-invert max-w-none text-slate-600 dark:text-slate-300 text-sm sm:text-base leading-relaxed space-y-4">
+              <p>
+                <strong>Sistem Komputer</strong> adalah kumpulan perangkat-perangkat komputer (fisik dan non-fisik) serta manusia yang saling terhubung dan berinteraksi satu sama lain untuk melakukan proses pengolahan data, hingga menghasilkan informasi yang berharga.
+              </p>
+              <div class="p-4 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 border-l-4 border-indigo-500 text-indigo-900 dark:text-indigo-200 text-sm">
+                <i class="fa-solid fa-lightbulb text-amber-500 mr-2"></i>
+                <strong>Konsep Kunci:</strong> Komputer tidak akan bisa berfungsi jika salah satu dari ketiga pilar ini hilang. Ketiganya merupakan satu kesatuan tak terpisahkan!
+              </div>
+            </div>
+
+            <!-- Tiga Pilar Visual Cards with Photo Banners -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+              
+              <!-- 1. Hardware Card with Photo -->
+              <div class="rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm hover:shadow-lg transition-all flex flex-col group">
+                <div class="relative h-44 overflow-hidden bg-slate-950">
+                  <img src="assets/img/pilar_hardware.jpg" alt="Foto Contoh Perangkat Keras Hardware" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                  <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"></div>
+                  <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[11px] font-bold bg-indigo-600 text-white shadow">
+                    Pilar 1
+                  </span>
+                  <div class="absolute bottom-3 left-3 text-white font-bold text-base flex items-center gap-2">
+                    <i class="fa-solid fa-microchip text-indigo-400"></i>
+                    <span>Hardware (Perangkat Keras)</span>
+                  </div>
+                </div>
+                <div class="p-5 flex-grow space-y-3 flex flex-col justify-between">
+                  <div>
+                    <h4 class="font-bold text-sm text-slate-800 dark:text-slate-100">Benda Fisik yang Nyata</h4>
+                    <p class="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+                      Komponen fisik komputer yang <strong>dapat dilihat langsung, disentuh, dan diraba</strong>. Bertindak sebagai "raga" komputer untuk menerima input dan mengeksekusi instruksi.
+                    </p>
+                  </div>
+                  <div class="pt-3 border-t border-slate-100 dark:border-slate-800 text-xs">
+                    <span class="font-bold text-indigo-600 dark:text-indigo-400">Contoh Nyata:</span>
+                    <p class="text-slate-500 text-[11px] mt-0.5">Processor (CPU), RAM, SSD, Motherboard, Keyboard, Mouse, Monitor, Printer.</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 2. Software Card with Photo -->
+              <div class="rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm hover:shadow-lg transition-all flex flex-col group">
+                <div class="relative h-44 overflow-hidden bg-slate-950">
+                  <img src="assets/img/pilar_software.jpg" alt="Foto Contoh Perangkat Lunak Software" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                  <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"></div>
+                  <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[11px] font-bold bg-cyan-600 text-white shadow">
+                    Pilar 2
+                  </span>
+                  <div class="absolute bottom-3 left-3 text-white font-bold text-base flex items-center gap-2">
+                    <i class="fa-solid fa-code text-cyan-400"></i>
+                    <span>Software (Perangkat Lunak)</span>
+                  </div>
+                </div>
+                <div class="p-5 flex-grow space-y-3 flex flex-col justify-between">
+                  <div>
+                    <h4 class="font-bold text-sm text-slate-800 dark:text-slate-100">Instruksi & Program Logika</h4>
+                    <p class="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+                      Kumpulan program dan kode instruksi elektronik yang <strong>tidak memiliki wujud fisik</strong>, namun bertugas memerintahkan hardware untuk memproses data.
+                    </p>
+                  </div>
+                  <div class="pt-3 border-t border-slate-100 dark:border-slate-800 text-xs">
+                    <span class="font-bold text-cyan-600 dark:text-cyan-400">Contoh Nyata:</span>
+                    <p class="text-slate-500 text-[11px] mt-0.5">Windows 11, Linux, macOS, Android, Microsoft Word, Google Chrome, Game.</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 3. Brainware Card with Photo -->
+              <div class="rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm hover:shadow-lg transition-all flex flex-col group">
+                <div class="relative h-44 overflow-hidden bg-slate-950">
+                  <img src="assets/img/pilar_brainware.jpg" alt="Foto Contoh Brainware Pengguna" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                  <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"></div>
+                  <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-600 text-white shadow">
+                    Pilar 3
+                  </span>
+                  <div class="absolute bottom-3 left-3 text-white font-bold text-base flex items-center gap-2">
+                    <i class="fa-solid fa-user-astronaut text-emerald-400"></i>
+                    <span>Brainware (Pengguna Manusia)</span>
+                  </div>
+                </div>
+                <div class="p-5 flex-grow space-y-3 flex flex-col justify-between">
+                  <div>
+                    <h4 class="font-bold text-sm text-slate-800 dark:text-slate-100">Manusia Pengendali Sistem</h4>
+                    <p class="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+                      <strong>Manusia</strong> yang mengoperasikan, membuat program, memelihara perangkat keras, dan memanfaatkan komputer untuk menyelesaikan pekerjaan sehari-hari.
+                    </p>
+                  </div>
+                  <div class="pt-3 border-t border-slate-100 dark:border-slate-800 text-xs">
+                    <span class="font-bold text-emerald-600 dark:text-emerald-400">Contoh Tingkatan:</span>
+                    <p class="text-slate-500 text-[11px] mt-0.5">Programmer (pembuat software), Administrator (pengelola server), Operator/Siswa (pemakai).</p>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Galeri Khusus: 3 Peran Brainware dengan Foto Nyata -->
+            <div class="pt-4 space-y-4">
+              <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
+                <h4 class="font-bold text-base text-slate-800 dark:text-slate-100 flex items-center gap-2">
+                  <i class="fa-solid fa-users text-emerald-500"></i>
+                  Mengenal Lebih Dekat 3 Peran Brainware:
+                </h4>
+                <span class="text-xs text-slate-400">Profesi Komputer</span>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                <!-- Programmer -->
+                <div class="rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 p-4 space-y-3">
+                  <img src="assets/img/brainware_programmer.jpg" alt="Programmer sedang coding" class="w-full h-32 object-cover rounded-lg">
+                  <div>
+                    <div class="flex items-center justify-between">
+                      <span class="font-bold text-xs text-indigo-600 dark:text-indigo-400 uppercase tracking-wide">Tingkat 1</span>
+                      <span class="text-[10px] bg-indigo-100 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300 px-2 py-0.5 rounded font-bold">Kreator</span>
+                    </div>
+                    <h5 class="font-bold text-sm text-slate-800 dark:text-slate-100 mt-1">Programmer (Pengembang)</h5>
+                    <p class="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+                      Orang yang memiliki keahlian menulis instruksi kode dalam bahasa pemrograman (seperti Python, Scratch, Java) untuk menciptakan aplikasi atau game.
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Administrator -->
+                <div class="rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 p-4 space-y-3">
+                  <img src="assets/img/brainware_admin.jpg" alt="Administrator Server" class="w-full h-32 object-cover rounded-lg">
+                  <div>
+                    <div class="flex items-center justify-between">
+                      <span class="font-bold text-xs text-cyan-600 dark:text-cyan-400 uppercase tracking-wide">Tingkat 2</span>
+                      <span class="text-[10px] bg-cyan-100 text-cyan-700 dark:bg-cyan-950 dark:text-cyan-300 px-2 py-0.5 rounded font-bold">Pengelola</span>
+                    </div>
+                    <h5 class="font-bold text-sm text-slate-800 dark:text-slate-100 mt-1">Administrator Sistem</h5>
+                    <p class="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+                      Orang yang bertugas merawat, mengelola keamanan, mengatur jaringan internet, dan memastikan server komputer tetap beroperasi stabil 24 jam.
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Operator / End User -->
+                <div class="rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 p-4 space-y-3">
+                  <img src="assets/img/brainware_operator.jpg" alt="Siswa sedang belajar komputer" class="w-full h-32 object-cover rounded-lg">
+                  <div>
+                    <div class="flex items-center justify-between">
+                      <span class="font-bold text-xs text-emerald-600 dark:text-emerald-400 uppercase tracking-wide">Tingkat 3</span>
+                      <span class="text-[10px] bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 px-2 py-0.5 rounded font-bold">Pengguna</span>
+                    </div>
+                    <h5 class="font-bold text-sm text-slate-800 dark:text-slate-100 mt-1">Operator / End-User (Siswa)</h5>
+                    <p class="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+                      Pengguna akhir yang memanfaatkan program aplikasi yang sudah jadi untuk mengetik tugas sekolah, browsing riset, atau membuat presentasi.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Interactivity Analogy -->
+            <div class="p-5 rounded-2xl bg-gradient-to-r from-slate-900 to-indigo-950 text-white space-y-3 border border-indigo-900">
+              <h4 class="font-bold text-sm text-cyan-400 flex items-center gap-2">
+                <i class="fa-solid fa-car"></i>
+                Analogi Mudah: "Sebuah Mobil Balap"
+              </h4>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                Bayangkan sistem komputer seperti mobil:
+                <br>• <strong>Hardware:</strong> Rangka mobil, mesin, roda, setir, dan pedal rem (komponen berwujud fisik).
+                <br>• <strong>Software:</strong> Aturan lalu lintas, sistem transmisi otomatis, dan peta petunjuk GPS.
+                <br>• <strong>Brainware:</strong> Sopir yang mengemudikan mobil tersebut ke tempat tujuan. Tanpa sopir, mobil secanggih apapun tidak akan bergerak!
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= SUB-BAB 2: PERANGKAT KERAS (HARDWARE) ================= -->
+        <div id="content-sub2" class="submateri-content hidden space-y-8">
+          <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-8">
+            <div class="border-b border-slate-100 dark:border-slate-800 pb-4">
+              <span class="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">Sub-Bab 2</span>
+              <h3 class="text-xl sm:text-2xl font-bold mt-1">Galeri Foto & Klasifikasi Perangkat Keras (Hardware)</h3>
+              <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">Pelajari 4 kelompok utama perangkat keras lengkap dengan foto produk asli dan fungsinya:</p>
+            </div>
+
+            <!-- Kategori 1: Input Devices -->
+            <div class="space-y-4">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold">
+                  <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-lg text-slate-800 dark:text-slate-100">1. Perangkat Masukan (Input Devices)</h4>
+                  <p class="text-xs text-slate-500">Memasukkan data teks, audio, gambar, atau sinyal kendali ke komputer</p>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+                <!-- Keyboard -->
+                <div class="rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 hover:shadow-md transition-all">
+                  <img src="assets/img/input_keyboard.jpg" alt="Foto Keyboard Komputer" class="w-full h-28 object-cover">
+                  <div class="p-3 space-y-1">
+                    <span class="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 uppercase">Input</span>
+                    <h5 class="font-bold text-xs text-slate-800 dark:text-slate-100">Keyboard</h5>
+                    <p class="text-[11px] text-slate-500 leading-tight">Mengetik karakter huruf, angka, dan tombol fungsi perintah.</p>
+                  </div>
+                </div>
+
+                <!-- Mouse -->
+                <div class="rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 hover:shadow-md transition-all">
+                  <img src="assets/img/input_mouse.jpg" alt="Foto Mouse Komputer" class="w-full h-28 object-cover">
+                  <div class="p-3 space-y-1">
+                    <span class="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 uppercase">Input</span>
+                    <h5 class="font-bold text-xs text-slate-800 dark:text-slate-100">Mouse Optik</h5>
+                    <p class="text-[11px] text-slate-500 leading-tight">Mengarahkan kursor pointer, klik ganda, dan scroll layar.</p>
+                  </div>
+                </div>
+
+                <!-- Mikrofon -->
+                <div class="rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 hover:shadow-md transition-all">
+                  <img src="assets/img/input_microphone.jpg" alt="Foto Mikrofon" class="w-full h-28 object-cover">
+                  <div class="p-3 space-y-1">
+                    <span class="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 uppercase">Input</span>
+                    <h5 class="font-bold text-xs text-slate-800 dark:text-slate-100">Mikrofon</h5>
+                    <p class="text-[11px] text-slate-500 leading-tight">Menangkap gelombang suara untuk diubah jadi sinyal digital.</p>
+                  </div>
+                </div>
+
+                <!-- Webcam -->
+                <div class="rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 hover:shadow-md transition-all">
+                  <img src="assets/img/input_webcam.jpg" alt="Foto Webcam" class="w-full h-28 object-cover">
+                  <div class="p-3 space-y-1">
+                    <span class="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 uppercase">Input</span>
+                    <h5 class="font-bold text-xs text-slate-800 dark:text-slate-100">Webcam</h5>
+                    <p class="text-[11px] text-slate-500 leading-tight">Merekam visual video tatap muka saat Google Meet / Zoom.</p>
+                  </div>
+                </div>
+
+                <!-- Scanner -->
+                <div class="rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 hover:shadow-md transition-all">
+                  <img src="assets/img/input_scanner.jpg" alt="Foto Scanner" class="w-full h-28 object-cover">
+                  <div class="p-3 space-y-1">
+                    <span class="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 uppercase">Input</span>
+                    <h5 class="font-bold text-xs text-slate-800 dark:text-slate-100">Scanner</h5>
+                    <p class="text-[11px] text-slate-500 leading-tight">Memindai lembar dokumen fisik menjadi berkas file digital.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Kategori 2: Processing Devices -->
+            <div class="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-800">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-cyan-600 text-white flex items-center justify-center font-bold">
+                  <i class="fa-solid fa-gear"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-lg text-slate-800 dark:text-slate-100">2. Perangkat Pemroses (Processing Devices)</h4>
+                  <p class="text-xs text-slate-500">Otak sentral pengolah data, kalkulasi aritmetika, dan pengendali sistem</p>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- CPU -->
+                <div class="rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 hover:shadow-md transition-all">
+                  <img src="assets/img/process_cpu.jpg" alt="Foto Processor CPU" class="w-full h-36 object-cover">
+                  <div class="p-4 space-y-1.5">
+                    <span class="text-[10px] font-bold text-cyan-600 dark:text-cyan-400 uppercase">Processing</span>
+                    <h5 class="font-bold text-sm text-slate-800 dark:text-slate-100">CPU (Processor)</h5>
+                    <p class="text-xs text-slate-500 leading-relaxed">Otak utama komputer berisi miliaran transistor mikro yang mengeksekusi instruksi (ALU + CU).</p>
+                  </div>
+                </div>
+
+                <!-- RAM -->
+                <div class="rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 hover:shadow-md transition-all">
+                  <img src="assets/img/process_ram.jpg" alt="Foto Memori RAM" class="w-full h-36 object-cover">
+                  <div class="p-4 space-y-1.5">
+                    <span class="text-[10px] font-bold text-cyan-600 dark:text-cyan-400 uppercase">Memory</span>
+                    <h5 class="font-bold text-sm text-slate-800 dark:text-slate-100">RAM (DDR4 / DDR5)</h5>
+                    <p class="text-xs text-slate-500 leading-relaxed">Menampung data aplikasi yang sedang aktif berjalan. Bersifat sementara (Volatile).</p>
+                  </div>
+                </div>
+
+                <!-- GPU -->
+                <div class="rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 hover:shadow-md transition-all">
+                  <img src="assets/img/process_gpu.jpg" alt="Foto GPU VGA Card" class="w-full h-36 object-cover">
+                  <div class="p-4 space-y-1.5">
+                    <span class="text-[10px] font-bold text-cyan-600 dark:text-cyan-400 uppercase">Graphics</span>
+                    <h5 class="font-bold text-sm text-slate-800 dark:text-slate-100">GPU (VGA Card)</h5>
+                    <p class="text-xs text-slate-500 leading-relaxed">Memproses grafis visual resolusi tinggi, game 3D, animasi, dan render video.</p>
+                  </div>
+                </div>
+
+                <!-- Motherboard -->
+                <div class="rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 hover:shadow-md transition-all">
+                  <img src="assets/img/process_motherboard.jpg" alt="Foto Motherboard Papan Induk" class="w-full h-36 object-cover">
+                  <div class="p-4 space-y-1.5">
+                    <span class="text-[10px] font-bold text-cyan-600 dark:text-cyan-400 uppercase">Circuit Board</span>
+                    <h5 class="font-bold text-sm text-slate-800 dark:text-slate-100">Motherboard</h5>
+                    <p class="text-xs text-slate-500 leading-relaxed">Papan sirkuit utama tempat menghubungkan CPU, RAM, GPU, dan jalur data bus.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Kategori 3: Output Devices -->
+            <div class="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-800">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold">
+                  <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-lg text-slate-800 dark:text-slate-100">3. Perangkat Keluaran (Output Devices)</h4>
+                  <p class="text-xs text-slate-500">Menyajikan hasil olahan komputer dalam format visual, cetak, atau audio</p>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- Monitor -->
+                <div class="rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 hover:shadow-md transition-all">
+                  <img src="assets/img/output_monitor.jpg" alt="Foto Monitor Komputer" class="w-full h-36 object-cover">
+                  <div class="p-4 space-y-1.5">
+                    <span class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase">Softcopy</span>
+                    <h5 class="font-bold text-sm text-slate-800 dark:text-slate-100">Monitor Layar</h5>
+                    <p class="text-xs text-slate-500 leading-relaxed">Menampilkan antarmuka grafis sistem dan video secara visual di layar kaca.</p>
+                  </div>
+                </div>
+
+                <!-- Printer -->
+                <div class="rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 hover:shadow-md transition-all">
+                  <img src="assets/img/output_printer.jpg" alt="Foto Printer Kertas" class="w-full h-36 object-cover">
+                  <div class="p-4 space-y-1.5">
+                    <span class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase">Hardcopy</span>
+                    <h5 class="font-bold text-sm text-slate-800 dark:text-slate-100">Printer</h5>
+                    <p class="text-xs text-slate-500 leading-relaxed">Mencetak tulisan dan foto digital ke lembaran kertas fisik (Hardcopy).</p>
+                  </div>
+                </div>
+
+                <!-- Speaker -->
+                <div class="rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 hover:shadow-md transition-all">
+                  <img src="assets/img/output_speaker.jpg" alt="Foto Speaker Audio" class="w-full h-36 object-cover">
+                  <div class="p-4 space-y-1.5">
+                    <span class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase">Audio</span>
+                    <h5 class="font-bold text-sm text-slate-800 dark:text-slate-100">Speaker / Headset</h5>
+                    <p class="text-xs text-slate-500 leading-relaxed">Mengubah sinyal listrik audio menjadi gelombang suara yang terdengar di telinga.</p>
+                  </div>
+                </div>
+
+                <!-- Proyektor -->
+                <div class="rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 hover:shadow-md transition-all">
+                  <img src="assets/img/output_projector.jpg" alt="Foto Proyektor LCD" class="w-full h-36 object-cover">
+                  <div class="p-4 space-y-1.5">
+                    <span class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase">Projection</span>
+                    <h5 class="font-bold text-sm text-slate-800 dark:text-slate-100">Proyektor LCD</h5>
+                    <p class="text-xs text-slate-500 leading-relaxed">Menyorotkan tampilan layar ke dinding/layar lebar untuk presentasi di kelas.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Kategori 4: Storage Devices -->
+            <div class="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-800">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-amber-600 text-white flex items-center justify-center font-bold">
+                  <i class="fa-solid fa-box-archive"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-lg text-slate-800 dark:text-slate-100">4. Perangkat Penyimpanan (Storage Devices)</h4>
+                  <p class="text-xs text-slate-500">Menyimpan file sistem, aplikasi, dan dokumen secara permanen (Non-Volatile)</p>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- SSD -->
+                <div class="rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 hover:shadow-md transition-all">
+                  <img src="assets/img/storage_ssd.jpg" alt="Foto SSD NVMe M2" class="w-full h-36 object-cover">
+                  <div class="p-4 space-y-1.5">
+                    <span class="text-[10px] font-bold text-amber-600 dark:text-amber-400 uppercase">Super Cepat</span>
+                    <h5 class="font-bold text-sm text-slate-800 dark:text-slate-100">SSD (Solid State Drive)</h5>
+                    <p class="text-xs text-slate-500 leading-relaxed">Menggunakan chip flash silikon berkecepatan tinggi, hening, dan tahan guncangan.</p>
+                  </div>
+                </div>
+
+                <!-- Harddisk -->
+                <div class="rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 hover:shadow-md transition-all">
+                  <img src="assets/img/storage_hdd.jpg" alt="Foto Harddisk HDD" class="w-full h-36 object-cover">
+                  <div class="p-4 space-y-1.5">
+                    <span class="text-[10px] font-bold text-amber-600 dark:text-amber-400 uppercase">Kapasitas Besar</span>
+                    <h5 class="font-bold text-sm text-slate-800 dark:text-slate-100">Harddisk (HDD)</h5>
+                    <p class="text-xs text-slate-500 leading-relaxed">Penyimpanan mekanik berbasis piringan magnetik yang berputar dengan motor.</p>
+                  </div>
+                </div>
+
+                <!-- Flashdisk -->
+                <div class="rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 hover:shadow-md transition-all">
+                  <img src="assets/img/storage_flashdisk.jpg" alt="Foto Flashdisk USB" class="w-full h-36 object-cover">
+                  <div class="p-4 space-y-1.5">
+                    <span class="text-[10px] font-bold text-amber-600 dark:text-amber-400 uppercase">Portabel</span>
+                    <h5 class="font-bold text-sm text-slate-800 dark:text-slate-100">Flashdisk USB</h5>
+                    <p class="text-xs text-slate-500 leading-relaxed">Penyimpanan saku portabel yang praktis untuk menyalin tugas antar komputer.</p>
+                  </div>
+                </div>
+
+                <!-- Cloud Storage -->
+                <div class="rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 hover:shadow-md transition-all">
+                  <img src="assets/img/storage_cloud.jpg" alt="Foto Cloud Storage Server" class="w-full h-36 object-cover">
+                  <div class="p-4 space-y-1.5">
+                    <span class="text-[10px] font-bold text-amber-600 dark:text-amber-400 uppercase">Online Drive</span>
+                    <h5 class="font-bold text-sm text-slate-800 dark:text-slate-100">Cloud Storage</h5>
+                    <p class="text-xs text-slate-500 leading-relaxed">Menyimpan file di server internet (Google Drive, OneDrive) dapat diakses di mana saja.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Perbedaan Penting: RAM vs ROM vs SSD -->
+            <div class="p-5 rounded-2xl bg-indigo-50 dark:bg-slate-800/80 border border-indigo-200 dark:border-slate-700 space-y-3">
+              <h4 class="font-bold text-sm text-indigo-900 dark:text-indigo-200 flex items-center gap-2">
+                <i class="fa-solid fa-circle-question text-indigo-600 dark:text-indigo-400"></i>
+                Catatan Penting Guru: Perbedaan RAM vs ROM vs SSD!
+              </h4>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                <div class="bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
+                  <div class="font-bold text-indigo-600 dark:text-indigo-400">RAM (Random Access Memory)</div>
+                  <div class="text-[11px] text-slate-500 mt-1">Sifat: <strong>Volatile</strong> (Hilang saat listrik mati). Menampung data aplikasi yang sedang aktif berjalan.</div>
+                </div>
+                <div class="bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
+                  <div class="font-bold text-emerald-600 dark:text-emerald-400">ROM (Read Only Memory)</div>
+                  <div class="text-[11px] text-slate-500 mt-1">Sifat: <strong>Non-Volatile</strong> (Tetap tersimpan). Hanya bisa dibaca, berisi instruksi booting awal (BIOS/UEFI).</div>
+                </div>
+                <div class="bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
+                  <div class="font-bold text-amber-600 dark:text-amber-400">SSD / Harddisk</div>
+                  <div class="text-[11px] text-slate-500 mt-1">Sifat: <strong>Penyimpanan Sekunder</strong>. Tempat menyimpan sistem operasi, tugas sekolah, game secara permanen.</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ================= SUB-BAB 3: PERANGKAT LUNAK (SOFTWARE) ================= -->
+        <div id="content-sub3" class="submateri-content hidden space-y-8">
+          <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-8">
+            <div class="border-b border-slate-100 dark:border-slate-800 pb-4">
+              <span class="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">Sub-Bab 3</span>
+              <h3 class="text-xl sm:text-2xl font-bold mt-1">Galeri Foto & Jenis-Jenis Perangkat Lunak (Software)</h3>
+              <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">Software adalah nyawa yang mengendalikan hardware dan menjembatani pengguna dengan komputer:</p>
+            </div>
+
+            <!-- Software Cards with Photos -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+              
+              <!-- 1. Sistem Operasi (OS) -->
+              <div class="rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 flex flex-col hover:shadow-lg transition-all group">
+                <img src="assets/img/software_os.jpg" alt="Foto Antarmuka Sistem Operasi" class="w-full h-36 object-cover group-hover:scale-105 transition-transform">
+                <div class="p-4 flex-grow flex flex-col justify-between space-y-2">
+                  <div>
+                    <span class="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 uppercase">Fondasi Sistem</span>
+                    <h4 class="font-bold text-sm text-slate-800 dark:text-slate-100 mt-0.5">Sistem Operasi (OS)</h4>
+                    <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+                      Software induk yang mengelola seluruh sumber daya perangkat keras dan menyediakan lingkungan tempat aplikasi berjalan.
+                    </p>
+                  </div>
+                  <div class="pt-2 border-t border-slate-200 dark:border-slate-700 text-[11px] text-slate-600 dark:text-slate-300">
+                    <strong>Contoh:</strong> Windows 11, macOS, Linux (Ubuntu), Android, iOS.
+                  </div>
+                </div>
+              </div>
+
+              <!-- 2. Program Aplikasi -->
+              <div class="rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 flex flex-col hover:shadow-lg transition-all group">
+                <img src="assets/img/software_app.jpg" alt="Foto Program Aplikasi" class="w-full h-36 object-cover group-hover:scale-105 transition-transform">
+                <div class="p-4 flex-grow flex flex-col justify-between space-y-2">
+                  <div>
+                    <span class="text-[10px] font-bold text-cyan-600 dark:text-cyan-400 uppercase">Produktivitas</span>
+                    <h4 class="font-bold text-sm text-slate-800 dark:text-slate-100 mt-0.5">Perangkat Lunak Aplikasi</h4>
+                    <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+                      Program siap pakai yang dirancang untuk membantu pekerjaan spesifik manusia (mengetik dokumen, riset, dan presentasi).
+                    </p>
+                  </div>
+                  <div class="pt-2 border-t border-slate-200 dark:border-slate-700 text-[11px] text-slate-600 dark:text-slate-300">
+                    <strong>Contoh:</strong> MS Word, Google Docs, Excel, Chrome, Photoshop.
+                  </div>
+                </div>
+              </div>
+
+              <!-- 3. Bahasa Pemrograman -->
+              <div class="rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 flex flex-col hover:shadow-lg transition-all group">
+                <img src="assets/img/software_coding.jpg" alt="Foto Bahasa Pemrograman Coding" class="w-full h-36 object-cover group-hover:scale-105 transition-transform">
+                <div class="p-4 flex-grow flex flex-col justify-between space-y-2">
+                  <div>
+                    <span class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase">Pemrograman</span>
+                    <h4 class="font-bold text-sm text-slate-800 dark:text-slate-100 mt-0.5">Bahasa Pemrograman</h4>
+                    <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+                      Bahasa instruksi terstruktur yang digunakan oleh programmer untuk menyusun logika dan membangun program baru.
+                    </p>
+                  </div>
+                  <div class="pt-2 border-t border-slate-200 dark:border-slate-700 text-[11px] text-slate-600 dark:text-slate-300">
+                    <strong>Contoh:</strong> Python, Scratch, C++, Java, JavaScript.
+                  </div>
+                </div>
+              </div>
+
+              <!-- 4. Program Utilitas -->
+              <div class="rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 flex flex-col hover:shadow-lg transition-all group">
+                <img src="assets/img/software_utility.jpg" alt="Foto Keamanan Utilitas" class="w-full h-36 object-cover group-hover:scale-105 transition-transform">
+                <div class="p-4 flex-grow flex flex-col justify-between space-y-2">
+                  <div>
+                    <span class="text-[10px] font-bold text-amber-600 dark:text-amber-400 uppercase">Pemeliharaan</span>
+                    <h4 class="font-bold text-sm text-slate-800 dark:text-slate-100 mt-0.5">Program Utilitas</h4>
+                    <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+                      Software pendukung yang bertugas memelihara stabilitas, mengamankan dari virus/malware, dan membersihkan memori.
+                    </p>
+                  </div>
+                  <div class="pt-2 border-t border-slate-200 dark:border-slate-700 text-[11px] text-slate-600 dark:text-slate-300">
+                    <strong>Contoh:</strong> Windows Defender, WinRAR, CCleaner.
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Interaksi User Interface: CLI vs GUI -->
+            <div class="p-5 rounded-2xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+              <h4 class="font-bold text-sm mb-3 flex items-center gap-2">
+                <i class="fa-solid fa-display text-indigo-500"></i>
+                Jenis Antarmuka Pengguna (User Interface):
+              </h4>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                <div class="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700">
+                  <span class="font-bold text-indigo-600 dark:text-indigo-400">GUI (Graphical User Interface)</span>
+                  <p class="text-slate-500 mt-1">Antarmuka visual modern berbasis jendela aplikasi, ikon tombol, menu warna, dan pointer mouse. Sangat ramah pengguna (user-friendly).</p>
+                </div>
+                <div class="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 font-mono">
+                  <span class="font-bold text-emerald-600 dark:text-emerald-400">CLI (Command Line Interface)</span>
+                  <p class="text-slate-500 mt-1">Antarmuka berbasis teks perintah hitam putih (contoh: Terminal Linux atau Command Prompt / PowerShell Windows).</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ================= SUB-BAB 4: SIKLUS CPU & PEMROSESAN ================= -->
+        <div id="content-sub4" class="submateri-content hidden space-y-6">
+          <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
+            <div class="border-b border-slate-100 dark:border-slate-800 pb-4">
+              <span class="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">Sub-Bab 4</span>
+              <h3 class="text-xl sm:text-2xl font-bold mt-1">Mekanisme Kerja CPU: Siklus Mesin (Machine Cycle)</h3>
+              <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">Melihat bagian dalam Central Processing Unit (CPU) dan cara kerjanya menjalankan instruksi.</p>
+            </div>
+
+            <!-- Bagian Dalam CPU -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                <div class="font-bold text-indigo-600 dark:text-indigo-400 flex items-center gap-2">
+                  <i class="fa-solid fa-calculator"></i> ALU (Arithmetic Logic Unit)
+                </div>
+                <p class="text-xs text-slate-600 dark:text-slate-400 mt-1.5 leading-relaxed">
+                  Bertugas melakukan seluruh perhitungan matematika (penjumlahan, pengurangan) serta perbandingan logika (AND, OR, NOT, lebih besar, lebih kecil).
+                </p>
+              </div>
+              <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                <div class="font-bold text-cyan-600 dark:text-cyan-400 flex items-center gap-2">
+                  <i class="fa-solid fa-traffic-light"></i> CU (Control Unit)
+                </div>
+                <p class="text-xs text-slate-600 dark:text-slate-400 mt-1.5 leading-relaxed">
+                  Sebagai "polisi lalu lintas" yang mengontrol dan mengatur arus instruksi antar komponen komputer, mengambil instruksi dari memori, dan mengarahkan ALU.
+                </p>
+              </div>
+              <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                <div class="font-bold text-amber-600 dark:text-amber-400 flex items-center gap-2">
+                  <i class="fa-solid fa-bolt"></i> Register & Cache
+                </div>
+                <p class="text-xs text-slate-600 dark:text-slate-400 mt-1.5 leading-relaxed">
+                  Memori berkecepatan paling tinggi di dalam inti prosesor yang digunakan untuk menyimpan instruksi dan data kecil yang sedang dieksekusi secara instan.
+                </p>
+              </div>
+            </div>
+
+            <!-- 4 Tahapan Siklus Mesin (Fetch - Decode - Execute - Store) -->
+            <div class="space-y-3">
+              <h4 class="font-bold text-base text-slate-800 dark:text-slate-100">4 Tahapan Siklus Eksekusi Mesin:</h4>
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                
+                <div class="p-4 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-800">
+                  <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-bold text-indigo-700 dark:text-indigo-300">Langkah 1</span>
+                    <span class="w-6 h-6 rounded-full bg-indigo-600 text-white text-xs flex items-center justify-center font-bold">1</span>
+                  </div>
+                  <h5 class="font-bold text-sm text-indigo-950 dark:text-indigo-200">FETCH (Mengambil)</h5>
+                  <p class="text-xs text-slate-600 dark:text-slate-400 mt-1">Control Unit mengambil perintah/instruksi berikutnya dari RAM/memori utama ke dalam register CPU.</p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-cyan-50 dark:bg-cyan-950/40 border border-cyan-200 dark:border-cyan-800">
+                  <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-bold text-cyan-700 dark:text-cyan-300">Langkah 2</span>
+                    <span class="w-6 h-6 rounded-full bg-cyan-600 text-white text-xs flex items-center justify-center font-bold">2</span>
+                  </div>
+                  <h5 class="font-bold text-sm text-cyan-950 dark:text-cyan-200">DECODE (Menerjemahkan)</h5>
+                  <p class="text-xs text-slate-600 dark:text-slate-400 mt-1">CPU menerjemahkan perintah biner tersebut menjadi sinyal kendali yang dipahami oleh komponen chip.</p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800">
+                  <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-bold text-emerald-700 dark:text-emerald-300">Langkah 3</span>
+                    <span class="w-6 h-6 rounded-full bg-emerald-600 text-white text-xs flex items-center justify-center font-bold">3</span>
+                  </div>
+                  <h5 class="font-bold text-sm text-emerald-950 dark:text-emerald-200">EXECUTE (Menjalankan)</h5>
+                  <p class="text-xs text-slate-600 dark:text-slate-400 mt-1">ALU atau unit terkait menjalankan instruksi tersebut (misal menjumlahkan 2 angka atau membandingkan).</p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800">
+                  <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-bold text-amber-700 dark:text-amber-300">Langkah 4</span>
+                    <span class="w-6 h-6 rounded-full bg-amber-600 text-white text-xs flex items-center justify-center font-bold">4</span>
+                  </div>
+                  <h5 class="font-bold text-sm text-amber-950 dark:text-amber-200">STORE (Menyimpan)</h5>
+                  <p class="text-xs text-slate-600 dark:text-slate-400 mt-1">Hasil dari eksekusi ditulis kembali ke register atau disimpan ke RAM untuk ditampilkan.</p>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Interactivity CTA to Lab -->
+            <div class="p-4 rounded-xl bg-gradient-to-r from-indigo-500 to-techCyan text-white flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div>
+                <div class="font-bold text-sm">Mau lihat simulasi visual cara kerja CPU?</div>
+                <div class="text-xs text-indigo-100">Coba simulator siklus IPOS di Lab Interaktif kami sekarang juga!</div>
+              </div>
+              <button onclick="switchTab('lab'); selectLabTab('tab-ipos');" class="px-4 py-2 bg-white text-indigo-900 rounded-lg text-xs font-bold hover:bg-indigo-50 transition-colors shadow">
+                Buka Simulator IPOS ➔
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= SUB-BAB 5: BILANGAN BINER & MEMORI ================= -->
+        <div id="content-sub5" class="submateri-content hidden space-y-6">
+          <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
+            <div class="border-b border-slate-100 dark:border-slate-800 pb-4">
+              <span class="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">Sub-Bab 5</span>
+              <h3 class="text-xl sm:text-2xl font-bold mt-1">Representasi Data: Bahasa Biner & Pengalamatan Memori</h3>
+              <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">Mengapa komputer hanya mengenal angka 0 dan 1?</p>
+            </div>
+
+            <div class="prose dark:prose-invert max-w-none text-slate-600 dark:text-slate-300 text-sm sm:text-base leading-relaxed space-y-3">
+              <p>
+                Di dalam sirkuit mikroskopis prosesor, miliaran transistor elektronik hanya mengenal dua keadaan fisik: <strong>Ada Tegangan Listrik (Nyala / ON)</strong> yang dilambangkan dengan angka <strong>1</strong>, dan <strong>Tidak Ada Listrik (Mati / OFF)</strong> yang dilambangkan dengan angka <strong>0</strong>.
+              </p>
+              <p>
+                Oleh karena itu, seluruh tulisan teks, foto selfie, video YouTube, hingga lagu MP3 pada akhirnya diubah menjadi jutaan deretan angka biner 0 dan 1!
+              </p>
+            </div>
+
+            <!-- Bit & Byte Table -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+              <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-center">
+                <span class="text-xs text-slate-400 font-mono">1 Bit (Binary Digit)</span>
+                <div class="text-xl font-black text-indigo-600 dark:text-indigo-400 mt-1">0 atau 1</div>
+                <p class="text-[11px] text-slate-500 mt-1">Unit terkecil data digital (ibarat satu saklar lampu)</p>
+              </div>
+
+              <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-center">
+                <span class="text-xs text-slate-400 font-mono">1 Byte (Bita)</span>
+                <div class="text-xl font-black text-cyan-600 dark:text-cyan-400 mt-1">8 Bit</div>
+                <p class="text-[11px] text-slate-500 mt-1">Cukup untuk menyimpan 1 karakter huruf (contoh: huruf 'A')</p>
+              </div>
+
+              <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-center">
+                <span class="text-xs text-slate-400 font-mono">1 Kilobyte (KB)</span>
+                <div class="text-xl font-black text-emerald-600 dark:text-emerald-400 mt-1">1.024 Byte</div>
+                <p class="text-[11px] text-slate-500 mt-1">Sekitar satu halaman paragraf teks dokumen</p>
+              </div>
+
+              <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-center">
+                <span class="text-xs text-slate-400 font-mono">1 Megabyte (MB)</span>
+                <div class="text-xl font-black text-amber-600 dark:text-amber-400 mt-1">1.024 KB</div>
+                <p class="text-[11px] text-slate-500 mt-1">1 Gigabyte (GB) = 1.024 MB<br>1 Terabyte (TB) = 1.024 GB</p>
+              </div>
+            </div>
+
+            <!-- Cara Menghitung Bilangan Biner ke Desimal -->
+            <div class="p-5 rounded-2xl bg-indigo-50/50 dark:bg-slate-800/90 border border-indigo-200 dark:border-slate-700 space-y-4">
+              <h4 class="font-bold text-sm text-indigo-900 dark:text-indigo-200 flex items-center gap-2">
+                <i class="fa-solid fa-calculator text-indigo-600 dark:text-indigo-400"></i>
+                Rumus Rahasia: Nilai Bobot 8-Bit (Pangkat 2)
+              </h4>
+              <p class="text-xs text-slate-600 dark:text-slate-300">
+                Setiap posisi bit dari kanan ke kiri memiliki bobot nilai kelipatan pangkat 2:
+              </p>
+
+              <!-- Binary Weight Chart -->
+              <div class="overflow-x-auto">
+                <table class="w-full text-center border-collapse text-xs font-mono">
+                  <thead>
+                    <tr class="bg-indigo-600 text-white font-bold">
+                      <th class="p-2 border border-indigo-500">Bit 7 (2⁷)</th>
+                      <th class="p-2 border border-indigo-500">Bit 6 (2⁶)</th>
+                      <th class="p-2 border border-indigo-500">Bit 5 (2⁵)</th>
+                      <th class="p-2 border border-indigo-500">Bit 4 (2⁴)</th>
+                      <th class="p-2 border border-indigo-500">Bit 3 (2³)</th>
+                      <th class="p-2 border border-indigo-500">Bit 2 (2²)</th>
+                      <th class="p-2 border border-indigo-500">Bit 1 (2¹)</th>
+                      <th class="p-2 border border-indigo-500">Bit 0 (2⁰)</th>
+                    </tr>
+                  </thead>
+                  <tbody class="bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-bold">
+                    <tr>
+                      <td class="p-2 border border-slate-200 dark:border-slate-700 text-indigo-600 dark:text-indigo-400">128</td>
+                      <td class="p-2 border border-slate-200 dark:border-slate-700 text-indigo-600 dark:text-indigo-400">64</td>
+                      <td class="p-2 border border-slate-200 dark:border-slate-700 text-indigo-600 dark:text-indigo-400">32</td>
+                      <td class="p-2 border border-slate-200 dark:border-slate-700 text-indigo-600 dark:text-indigo-400">16</td>
+                      <td class="p-2 border border-slate-200 dark:border-slate-700 text-indigo-600 dark:text-indigo-400">8</td>
+                      <td class="p-2 border border-slate-200 dark:border-slate-700 text-indigo-600 dark:text-indigo-400">4</td>
+                      <td class="p-2 border border-slate-200 dark:border-slate-700 text-indigo-600 dark:text-indigo-400">2</td>
+                      <td class="p-2 border border-slate-200 dark:border-slate-700 text-indigo-600 dark:text-indigo-400">1</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Contoh Konversi -->
+              <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-700 text-xs space-y-2">
+                <div class="font-bold text-slate-800 dark:text-slate-200">
+                  Contoh Kasus: Berapakah nilai biner <span class="font-mono bg-indigo-100 dark:bg-indigo-950 px-2 py-0.5 rounded text-indigo-600 dark:text-indigo-400 font-bold">00001011</span> dalam desimal?
+                </div>
+                <div class="font-mono text-slate-600 dark:text-slate-300 text-[11px] leading-relaxed">
+                  Jumlahkan kolom yang berangka 1:
+                  <br>➔ (0×128) + (0×64) + (0×32) + (0×16) + (1×8) + (0×4) + (1×2) + (1×1)
+                  <br>➔ 8 + 2 + 1 = <strong class="text-emerald-600 dark:text-emerald-400 text-sm">11</strong>! Sangat mudah bukan?
+                </div>
+              </div>
+
+              <!-- Button CTA to Interactive Binary Converter -->
+              <div class="text-right">
+                <button onclick="switchTab('lab'); selectLabTab('tab-binary');" class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg text-xs font-bold hover:bg-indigo-700 transition-colors shadow">
+                  <i class="fa-solid fa-toggle-on"></i>
+                  Coba Simulator Saklar 8-Bit di Lab
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= TAB 3: LAB INTERAKTIF (SIMULASI) ================= -->
+    <section id="tab-lab" class="tab-pane hidden py-8 sm:py-12">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        
+        <!-- Lab Header & Nav Tabs -->
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+          <div>
+            <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 text-xs font-bold">
+              <i class="fa-solid fa-flask"></i> Hands-On Learning
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight mt-1">Laboratorium Interaktif</h2>
+            <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">Belajar lebih cepat dengan praktik simulasi langsung:</p>
+          </div>
+
+          <!-- Switcher Lab Tool -->
+          <div class="flex flex-wrap items-center gap-1.5 p-1.5 bg-slate-100 dark:bg-slate-800 rounded-xl w-full md:w-auto">
+            <button onclick="selectLabTab('tab-sort')" id="btn-lab-sort" class="lab-tab-btn active px-3 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5">
+              <i class="fa-solid fa-layer-group"></i>
+              <span>1. Klasifikasi Hardware</span>
+            </button>
+            <button onclick="selectLabTab('tab-binary')" id="btn-lab-binary" class="lab-tab-btn px-3 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5">
+              <i class="fa-solid fa-toggle-on"></i>
+              <span>2. Saklar Biner 8-Bit</span>
+            </button>
+            <button onclick="selectLabTab('tab-ipos')" id="btn-lab-ipos" class="lab-tab-btn px-3 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5">
+              <i class="fa-solid fa-arrows-split-up-and-left"></i>
+              <span>3. Simulator Siklus IPOS</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- ================= LAB 1: GAME KLASIFIKASI HARDWARE ================= -->
+        <div id="lab-sort" class="lab-pane active space-y-6">
+          <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-800 pb-4">
+              <div>
+                <h3 class="text-lg sm:text-xl font-bold">Tantangan: Klasifikasikan Perangkat Keras!</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400">Klik salah satu perangkat di daftar (lihat foto ilustrasinya), lalu klik kotak kategori yang sesuai!</p>
+              </div>
+              <div class="flex items-center gap-3">
+                <div class="px-3 py-1.5 bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-bold text-xs rounded-xl border border-indigo-200 dark:border-indigo-800">
+                  Skor: <span id="sortScore" class="text-sm font-black">0</span> / 12
+                </div>
+                <button onclick="resetSortGame()" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors flex items-center gap-1.5">
+                  <i class="fa-solid fa-rotate-right"></i> Reset
+                </button>
+              </div>
+            </div>
+
+            <!-- Selected Item Indicator with Photo Preview -->
+            <div id="sortActiveSelectionBar" class="p-3 sm:p-4 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 flex items-center justify-between text-xs transition-all">
+              <div class="flex items-center gap-3">
+                <img id="selectedComponentImg" src="assets/img/pilar_hardware.jpg" alt="Preview Hardware" class="w-12 h-12 object-cover rounded-lg border border-indigo-300 hidden sm:block">
+                <div>
+                  <div class="text-[11px] text-indigo-600 dark:text-indigo-400 font-bold uppercase">Komponen Terpilih:</div>
+                  <div id="selectedComponentName" class="font-extrabold text-sm text-slate-800 dark:text-slate-100">Pilih salah satu item di bawah</div>
+                </div>
+              </div>
+              <span class="text-[11px] text-slate-500 hidden sm:inline">Lalu klik salah satu dari 4 zona kategori di bawah</span>
+            </div>
+
+            <!-- Items Deck to Sort -->
+            <div class="space-y-2">
+              <div class="text-xs font-bold uppercase tracking-wider text-slate-400">Daftar Perangkat Yang Harus Diklasifikasikan:</div>
+              <div id="sortItemsPool" class="flex flex-wrap gap-2.5 min-h-[90px] p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700">
+                <!-- Dynamically populated via app.js -->
+              </div>
+            </div>
+
+            <!-- 4 Drop / Target Categories -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <!-- Target 1: Input -->
+              <div onclick="handleCategoryDrop('input')" class="category-zone cursor-pointer p-4 rounded-xl border-2 border-dashed border-indigo-300 dark:border-indigo-800 bg-indigo-50/30 dark:bg-indigo-950/20 hover:border-indigo-500 transition-all flex flex-col h-64">
+                <div class="flex items-center justify-between border-b border-indigo-200 dark:border-indigo-800/60 pb-2">
+                  <span class="font-bold text-xs text-indigo-700 dark:text-indigo-300 flex items-center gap-1.5">
+                    <i class="fa-solid fa-arrow-right-to-bracket"></i> INPUT DEVICE
+                  </span>
+                  <span id="count-input" class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-indigo-200 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200">0</span>
+                </div>
+                <div id="zone-input" class="zone-items flex-grow overflow-y-auto space-y-1.5 pt-2">
+                  <!-- items inside -->
+                </div>
+              </div>
+
+              <!-- Target 2: Process -->
+              <div onclick="handleCategoryDrop('process')" class="category-zone cursor-pointer p-4 rounded-xl border-2 border-dashed border-cyan-300 dark:border-cyan-800 bg-cyan-50/30 dark:bg-cyan-950/20 hover:border-cyan-500 transition-all flex flex-col h-64">
+                <div class="flex items-center justify-between border-b border-cyan-200 dark:border-cyan-800/60 pb-2">
+                  <span class="font-bold text-xs text-cyan-700 dark:text-cyan-300 flex items-center gap-1.5">
+                    <i class="fa-solid fa-gear"></i> PROCESSING
+                  </span>
+                  <span id="count-process" class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-cyan-200 dark:bg-cyan-900 text-cyan-800 dark:text-cyan-200">0</span>
+                </div>
+                <div id="zone-process" class="zone-items flex-grow overflow-y-auto space-y-1.5 pt-2">
+                  <!-- items inside -->
+                </div>
+              </div>
+
+              <!-- Target 3: Output -->
+              <div onclick="handleCategoryDrop('output')" class="category-zone cursor-pointer p-4 rounded-xl border-2 border-dashed border-emerald-300 dark:border-emerald-800 bg-emerald-50/30 dark:bg-emerald-950/20 hover:border-emerald-500 transition-all flex flex-col h-64">
+                <div class="flex items-center justify-between border-b border-emerald-200 dark:border-emerald-800/60 pb-2">
+                  <span class="font-bold text-xs text-emerald-700 dark:text-emerald-300 flex items-center gap-1.5">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i> OUTPUT DEVICE
+                  </span>
+                  <span id="count-output" class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-200 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200">0</span>
+                </div>
+                <div id="zone-output" class="zone-items flex-grow overflow-y-auto space-y-1.5 pt-2">
+                  <!-- items inside -->
+                </div>
+              </div>
+
+              <!-- Target 4: Storage -->
+              <div onclick="handleCategoryDrop('storage')" class="category-zone cursor-pointer p-4 rounded-xl border-2 border-dashed border-amber-300 dark:border-amber-800 bg-amber-50/30 dark:bg-amber-950/20 hover:border-amber-500 transition-all flex flex-col h-64">
+                <div class="flex items-center justify-between border-b border-amber-200 dark:border-amber-800/60 pb-2">
+                  <span class="font-bold text-xs text-amber-700 dark:text-amber-300 flex items-center gap-1.5">
+                    <i class="fa-solid fa-box-archive"></i> STORAGE DEVICE
+                  </span>
+                  <span id="count-storage" class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-200 dark:bg-amber-900 text-amber-800 dark:text-amber-200">0</span>
+                </div>
+                <div id="zone-storage" class="zone-items flex-grow overflow-y-auto space-y-1.5 pt-2">
+                  <!-- items inside -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Feedback message -->
+            <div id="sortFeedback" class="hidden p-3 rounded-xl text-center text-xs font-bold transition-all"></div>
+          </div>
+        </div>
+
+        <!-- ================= LAB 2: SAKLAR BINER 8-BIT INTERAKTIF ================= -->
+        <div id="lab-binary" class="lab-pane hidden space-y-6">
+          <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
+            <div class="border-b border-slate-100 dark:border-slate-800 pb-4">
+              <h3 class="text-lg sm:text-xl font-bold">Simulator Saklar 8-Bit (Byte Interactive Switcher)</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Klik saklar (0 / 1) di bawah untuk melihat bagaimana kombinasi bit menghasilkan angka desimal dan karakter ASCII!</p>
+            </div>
+
+            <!-- Target Challenge Mini Quest -->
+            <div class="p-4 rounded-xl bg-gradient-to-r from-indigo-900 to-slate-900 text-white flex flex-col sm:flex-row items-center justify-between gap-3">
+              <div>
+                <span class="text-[10px] font-bold text-amber-300 uppercase tracking-widest">Mini Quest Tantangan Guru</span>
+                <div class="text-sm font-bold flex items-center gap-2 mt-0.5">
+                  Bentuklah Nilai Desimal: <span id="binaryChallengeTarget" class="px-2.5 py-0.5 rounded-lg bg-amber-400 text-slate-950 font-black text-base">42</span>
+                </div>
+              </div>
+              <div class="flex items-center gap-2">
+                <button onclick="newBinaryChallenge()" class="px-3 py-1.5 rounded-lg bg-white/20 hover:bg-white/30 text-white text-xs font-bold transition-colors">
+                  <i class="fa-solid fa-dice mr-1"></i> Ganti Target
+                </button>
+                <div id="binaryQuestResult" class="text-xs font-bold px-3 py-1 rounded-lg hidden"></div>
+              </div>
+            </div>
+
+            <!-- 8 Bit Switchboard Display -->
+            <div class="grid grid-cols-4 sm:grid-cols-8 gap-2 sm:gap-3">
+              <!-- Bit 7: 128 -->
+              <div onclick="toggleBit(7)" class="bit-card cursor-pointer p-3 sm:p-4 rounded-2xl border-2 border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-center hover:scale-105 active:scale-95 transition-all select-none">
+                <div class="text-[10px] sm:text-xs font-mono text-slate-400">Bit 7</div>
+                <div class="text-xs font-bold text-indigo-600 dark:text-indigo-400 my-1">128</div>
+                <div id="bit-val-7" class="bit-state text-2xl sm:text-3xl font-black font-mono text-slate-400">0</div>
+                <div class="mt-2 text-[10px] uppercase font-semibold text-slate-400" id="bit-lbl-7">OFF</div>
+              </div>
+
+              <!-- Bit 6: 64 -->
+              <div onclick="toggleBit(6)" class="bit-card cursor-pointer p-3 sm:p-4 rounded-2xl border-2 border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-center hover:scale-105 active:scale-95 transition-all select-none">
+                <div class="text-[10px] sm:text-xs font-mono text-slate-400">Bit 6</div>
+                <div class="text-xs font-bold text-indigo-600 dark:text-indigo-400 my-1">64</div>
+                <div id="bit-val-6" class="bit-state text-2xl sm:text-3xl font-black font-mono text-slate-400">0</div>
+                <div class="mt-2 text-[10px] uppercase font-semibold text-slate-400" id="bit-lbl-6">OFF</div>
+              </div>
+
+              <!-- Bit 5: 32 -->
+              <div onclick="toggleBit(5)" class="bit-card cursor-pointer p-3 sm:p-4 rounded-2xl border-2 border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-center hover:scale-105 active:scale-95 transition-all select-none">
+                <div class="text-[10px] sm:text-xs font-mono text-slate-400">Bit 5</div>
+                <div class="text-xs font-bold text-indigo-600 dark:text-indigo-400 my-1">32</div>
+                <div id="bit-val-5" class="bit-state text-2xl sm:text-3xl font-black font-mono text-slate-400">0</div>
+                <div class="mt-2 text-[10px] uppercase font-semibold text-slate-400" id="bit-lbl-5">OFF</div>
+              </div>
+
+              <!-- Bit 4: 16 -->
+              <div onclick="toggleBit(4)" class="bit-card cursor-pointer p-3 sm:p-4 rounded-2xl border-2 border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-center hover:scale-105 active:scale-95 transition-all select-none">
+                <div class="text-[10px] sm:text-xs font-mono text-slate-400">Bit 4</div>
+                <div class="text-xs font-bold text-indigo-600 dark:text-indigo-400 my-1">16</div>
+                <div id="bit-val-4" class="bit-state text-2xl sm:text-3xl font-black font-mono text-slate-400">0</div>
+                <div class="mt-2 text-[10px] uppercase font-semibold text-slate-400" id="bit-lbl-4">OFF</div>
+              </div>
+
+              <!-- Bit 3: 8 -->
+              <div onclick="toggleBit(3)" class="bit-card cursor-pointer p-3 sm:p-4 rounded-2xl border-2 border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-center hover:scale-105 active:scale-95 transition-all select-none">
+                <div class="text-[10px] sm:text-xs font-mono text-slate-400">Bit 3</div>
+                <div class="text-xs font-bold text-indigo-600 dark:text-indigo-400 my-1">8</div>
+                <div id="bit-val-3" class="bit-state text-2xl sm:text-3xl font-black font-mono text-slate-400">0</div>
+                <div class="mt-2 text-[10px] uppercase font-semibold text-slate-400" id="bit-lbl-3">OFF</div>
+              </div>
+
+              <!-- Bit 2: 4 -->
+              <div onclick="toggleBit(2)" class="bit-card cursor-pointer p-3 sm:p-4 rounded-2xl border-2 border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-center hover:scale-105 active:scale-95 transition-all select-none">
+                <div class="text-[10px] sm:text-xs font-mono text-slate-400">Bit 2</div>
+                <div class="text-xs font-bold text-indigo-600 dark:text-indigo-400 my-1">4</div>
+                <div id="bit-val-2" class="bit-state text-2xl sm:text-3xl font-black font-mono text-slate-400">0</div>
+                <div class="mt-2 text-[10px] uppercase font-semibold text-slate-400" id="bit-lbl-2">OFF</div>
+              </div>
+
+              <!-- Bit 1: 2 -->
+              <div onclick="toggleBit(1)" class="bit-card cursor-pointer p-3 sm:p-4 rounded-2xl border-2 border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-center hover:scale-105 active:scale-95 transition-all select-none">
+                <div class="text-[10px] sm:text-xs font-mono text-slate-400">Bit 1</div>
+                <div class="text-xs font-bold text-indigo-600 dark:text-indigo-400 my-1">2</div>
+                <div id="bit-val-1" class="bit-state text-2xl sm:text-3xl font-black font-mono text-slate-400">0</div>
+                <div class="mt-2 text-[10px] uppercase font-semibold text-slate-400" id="bit-lbl-1">OFF</div>
+              </div>
+
+              <!-- Bit 0: 1 -->
+              <div onclick="toggleBit(0)" class="bit-card cursor-pointer p-3 sm:p-4 rounded-2xl border-2 border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-center hover:scale-105 active:scale-95 transition-all select-none">
+                <div class="text-[10px] sm:text-xs font-mono text-slate-400">Bit 0</div>
+                <div class="text-xs font-bold text-indigo-600 dark:text-indigo-400 my-1">1</div>
+                <div id="bit-val-0" class="bit-state text-2xl sm:text-3xl font-black font-mono text-slate-400">0</div>
+                <div class="mt-2 text-[10px] uppercase font-semibold text-slate-400" id="bit-lbl-0">OFF</div>
+              </div>
+            </div>
+
+            <!-- Quick Action Buttons -->
+            <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
+              <div class="flex items-center gap-2">
+                <button onclick="setAllBits(0)" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                  Set Semua 0 (Matikan)
+                </button>
+                <button onclick="setAllBits(1)" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                  Set Semua 1 (Nyalakan)
+                </button>
+              </div>
+              <div class="text-xs text-slate-500 font-mono">
+                Formula: <span id="binaryFormulaText" class="font-bold text-indigo-600 dark:text-indigo-400">0 = 0</span>
+              </div>
+            </div>
+
+            <!-- Conversion Output Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+              <div class="p-4 rounded-xl bg-indigo-50 dark:bg-slate-800 border border-indigo-200 dark:border-slate-700 text-center">
+                <span class="text-xs text-slate-500">Nilai Desimal (Basis 10):</span>
+                <div id="displayDecimal" class="text-3xl font-black text-indigo-600 dark:text-indigo-400 mt-1 font-mono">0</div>
+              </div>
+              <div class="p-4 rounded-xl bg-cyan-50 dark:bg-slate-800 border border-cyan-200 dark:border-slate-700 text-center">
+                <span class="text-xs text-slate-500">Biner Lengkap (8-Bit):</span>
+                <div id="displayBinaryStr" class="text-2xl font-black text-cyan-600 dark:text-cyan-400 mt-1 font-mono">00000000</div>
+              </div>
+              <div class="p-4 rounded-xl bg-emerald-50 dark:bg-slate-800 border border-emerald-200 dark:border-slate-700 text-center">
+                <span class="text-xs text-slate-500">Karakter ASCII / Simbol:</span>
+                <div id="displayAscii" class="text-2xl font-black text-emerald-600 dark:text-emerald-400 mt-1 font-mono">- (Null)</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ================= LAB 3: SIMULATOR SIKLUS IPOS ================= -->
+        <div id="lab-ipos" class="lab-pane hidden space-y-6">
+          <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
+            <div class="border-b border-slate-100 dark:border-slate-800 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <h3 class="text-lg sm:text-xl font-bold">Simulator Siklus Pemrosesan Data (IPOS)</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400">Lihat bagaimana data mengalir dari Input, masuk ke RAM & CPU, keluar ke Layar, dan disimpan ke Storage!</p>
+              </div>
+              <button onclick="startIPOSSimulation()" id="startIposBtn" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-techCyan text-white text-xs font-bold shadow-md hover:scale-105 active:scale-95 transition-all flex items-center gap-2">
+                <i class="fa-solid fa-play"></i>
+                <span>Jalankan Siklus Data</span>
+              </button>
+            </div>
+
+            <!-- Input controller -->
+            <div class="flex flex-col sm:flex-row items-center gap-3 p-4 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700">
+              <label class="text-xs font-bold text-slate-700 dark:text-slate-300">Pilih Operasi Instruksi:</label>
+              <select id="iposScenario" class="px-3 py-2 rounded-lg text-xs bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <option value="math">Penjumlahan Matematika: (7 + 5)</option>
+                <option value="text">Ketik Dokumen: Simpan "Halo Informatika"</option>
+                <option value="photo">Buka Foto: Tampilkan gambar wallpaper</option>
+              </select>
+              <span class="text-xs text-slate-500 italic">Tekan "Jalankan Siklus Data" untuk mengamati animasinya!</span>
+            </div>
+
+            <!-- Animated Diagram Pipeline -->
+            <div class="relative p-6 rounded-2xl bg-slate-950 text-white overflow-hidden border border-slate-800">
+              <!-- Moving Packet Indicator -->
+              <div id="iposPacket" class="hidden absolute top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-techCyan shadow-lg shadow-cyan-500/50 flex items-center justify-center text-[10px] font-black text-slate-950 z-20 transition-all duration-700 ease-in-out">
+                <i class="fa-solid fa-bolt"></i>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-4 gap-4 relative z-10">
+                
+                <!-- Stage 1: Input -->
+                <div id="ipos-stage-1" class="ipos-node p-4 rounded-xl bg-slate-900 border-2 border-slate-800 text-center transition-all">
+                  <div class="w-10 h-10 mx-auto rounded-xl bg-indigo-600/30 text-indigo-400 flex items-center justify-center text-lg mb-2">
+                    <i class="fa-solid fa-keyboard"></i>
+                  </div>
+                  <div class="text-xs font-bold text-indigo-400 uppercase">1. INPUT</div>
+                  <div class="text-xs font-semibold text-slate-200 mt-1" id="iposInputText">Keyboard: Menekan "7 + 5"</div>
+                  <div class="text-[10px] text-slate-500 mt-1">Sinyal elektrik dikirim ke port bus</div>
+                </div>
+
+                <!-- Stage 2: CPU & RAM -->
+                <div id="ipos-stage-2" class="ipos-node p-4 rounded-xl bg-slate-900 border-2 border-slate-800 text-center transition-all">
+                  <div class="w-10 h-10 mx-auto rounded-xl bg-cyan-600/30 text-cyan-400 flex items-center justify-center text-lg mb-2">
+                    <i class="fa-solid fa-microchip"></i>
+                  </div>
+                  <div class="text-xs font-bold text-cyan-400 uppercase">2. PROCESS (CPU & RAM)</div>
+                  <div class="text-xs font-semibold text-slate-200 mt-1" id="iposProcessText">CU & ALU Menghitung</div>
+                  <div class="text-[10px] text-slate-500 mt-1">Fetch ➔ Decode ➔ ALU eksekusi</div>
+                </div>
+
+                <!-- Stage 3: Output -->
+                <div id="ipos-stage-3" class="ipos-node p-4 rounded-xl bg-slate-900 border-2 border-slate-800 text-center transition-all">
+                  <div class="w-10 h-10 mx-auto rounded-xl bg-emerald-600/30 text-emerald-400 flex items-center justify-center text-lg mb-2">
+                    <i class="fa-solid fa-desktop"></i>
+                  </div>
+                  <div class="text-xs font-bold text-emerald-400 uppercase">3. OUTPUT</div>
+                  <div class="text-xs font-semibold text-slate-200 mt-1" id="iposOutputText">Layar Menampilkan Hasil</div>
+                  <div class="text-[10px] text-slate-500 mt-1">Hasil "12" tampil di monitor</div>
+                </div>
+
+                <!-- Stage 4: Storage -->
+                <div id="ipos-stage-4" class="ipos-node p-4 rounded-xl bg-slate-900 border-2 border-slate-800 text-center transition-all">
+                  <div class="w-10 h-10 mx-auto rounded-xl bg-amber-600/30 text-amber-400 flex items-center justify-center text-lg mb-2">
+                    <i class="fa-solid fa-hard-drive"></i>
+                  </div>
+                  <div class="text-xs font-bold text-amber-400 uppercase">4. STORAGE</div>
+                  <div class="text-xs font-semibold text-slate-200 mt-1" id="iposStorageText">Disimpan ke SSD / File</div>
+                  <div class="text-[10px] text-slate-500 mt-1">Permanen non-volatile</div>
+                </div>
+
+              </div>
+
+              <!-- Status Log Console -->
+              <div class="mt-6 pt-4 border-t border-slate-800/80 font-mono text-xs flex items-center gap-3">
+                <span class="text-cyan-400 font-bold"><i class="fa-solid fa-terminal mr-1"></i> STATUS LOG:</span>
+                <span id="iposLogStatus" class="text-slate-300">Siap. Klik tombol "Jalankan Siklus Data" untuk memulai.</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= TAB 4: KUIS & UJI KOMPETENSI ================= -->
+    <section id="tab-kuis" class="tab-pane hidden py-8 sm:py-12">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        
+        <!-- Welcome Screen Kuis -->
+        <div id="quizStartScreen" class="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-10 border border-slate-200 dark:border-slate-800 shadow-xl text-center space-y-6">
+          <div class="w-20 h-20 mx-auto rounded-3xl bg-gradient-to-tr from-amber-500 to-indigo-600 flex items-center justify-center text-white text-3xl shadow-lg shadow-indigo-500/30">
+            <i class="fa-solid fa-trophy"></i>
+          </div>
+          <div>
+            <span class="text-xs font-bold uppercase tracking-widest text-indigo-600 dark:text-indigo-400">Asesmen Pembelajaran</span>
+            <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight mt-1">Uji Kompetensi Bab 4: Sistem Komputer</h2>
+            <p class="text-sm text-slate-500 dark:text-slate-400 max-w-lg mx-auto mt-2">
+              Uji sejauh mana pemahamanmu mengenai perangkat keras, software, siklus CPU, dan bilangan biner melalui 15 soal interaktif standar Asesmen Nasional.
+            </p>
+          </div>
+
+          <!-- Student Name Input for Certificate -->
+          <div class="max-w-md mx-auto space-y-2 text-left">
+            <label for="studentNameInput" class="text-xs font-bold text-slate-700 dark:text-slate-300">Nama Lengkap Siswa (Untuk Sertifikat Digital):</label>
+            <div class="relative">
+              <i class="fa-solid fa-user absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+              <input type="text" id="studentNameInput" placeholder="Masukkan nama kamu di sini..." class="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 font-semibold">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-3 gap-3 max-w-md mx-auto text-xs pt-2">
+            <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+              <div class="font-bold text-indigo-600 dark:text-indigo-400 text-base">15</div>
+              <div class="text-slate-400 text-[11px]">Butir Soal</div>
+            </div>
+            <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+              <div class="font-bold text-emerald-600 dark:text-emerald-400 text-base">75</div>
+              <div class="text-slate-400 text-[11px]">KKM Kelulusan</div>
+            </div>
+            <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+              <div class="font-bold text-amber-600 dark:text-amber-400 text-base">Sertifikat</div>
+              <div class="text-slate-400 text-[11px]">Bisa Dicetak</div>
+            </div>
+          </div>
+
+          <div class="pt-4">
+            <button onclick="startQuiz()" class="px-8 py-3.5 rounded-xl bg-gradient-to-r from-indigo-600 to-techCyan hover:from-indigo-700 hover:to-techCyan text-white font-bold text-sm shadow-lg shadow-indigo-500/25 hover:scale-105 active:scale-95 transition-all">
+              <i class="fa-solid fa-play mr-2"></i> Mulai Kuis Sekarang
+            </button>
+          </div>
+        </div>
+
+        <!-- Quiz Gameplay Screen -->
+        <div id="quizPlayScreen" class="hidden bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-xl space-y-6">
+          
+          <!-- Top Bar: Question Counter & Progress Bar -->
+          <div class="space-y-3">
+            <div class="flex items-center justify-between text-xs font-bold text-slate-500 dark:text-slate-400">
+              <span id="quizQuestionNumber">Soal 1 dari 15</span>
+              <span id="quizScorePreview" class="text-indigo-600 dark:text-indigo-400">Skor Saat Ini: 0</span>
+            </div>
+            <!-- Progress Bar -->
+            <div class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2.5 overflow-hidden">
+              <div id="quizProgressBar" class="bg-gradient-to-r from-indigo-500 to-techCyan h-2.5 rounded-full transition-all duration-300" style="width: 6.6%"></div>
+            </div>
+          </div>
+
+          <!-- Question Content Box -->
+          <div class="space-y-4">
+            <span id="quizCategoryBadge" class="inline-block px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300">
+              Kategori: Hardware
+            </span>
+            <h3 id="quizQuestionText" class="text-lg sm:text-xl font-bold text-slate-800 dark:text-slate-100 leading-snug">
+              Pertanyaan kuis akan dimuat di sini...
+            </h3>
+          </div>
+
+          <!-- Multiple Choice Options -->
+          <div id="quizOptionsContainer" class="space-y-3">
+            <!-- Dynamically populated via app.js -->
+          </div>
+
+          <!-- Next Button / Instant Explanation -->
+          <div id="quizFeedbackBox" class="hidden p-4 rounded-2xl border text-xs leading-relaxed transition-all">
+            <!-- Explanation text inserted by app.js -->
+          </div>
+
+          <div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800">
+            <button onclick="quitQuiz()" class="text-xs text-rose-500 hover:text-rose-600 font-bold transition-colors">
+              <i class="fa-solid fa-arrow-left mr-1"></i> Keluar Kuis
+            </button>
+            <button id="quizNextBtn" onclick="nextQuizQuestion()" class="hidden px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow transition-all">
+              Pertanyaan Berikutnya ➔
+            </button>
+          </div>
+        </div>
+
+        <!-- Quiz Result Screen -->
+        <div id="quizResultScreen" class="hidden bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-10 border border-slate-200 dark:border-slate-800 shadow-xl text-center space-y-6">
+          <div id="quizResultBadgeIcon" class="w-20 h-20 mx-auto rounded-3xl bg-emerald-500 text-white flex items-center justify-center text-4xl shadow-lg shadow-emerald-500/30">
+            <i class="fa-solid fa-award"></i>
+          </div>
+
+          <div>
+            <span class="text-xs font-bold uppercase tracking-widest text-slate-400">Hasil Evaluasi</span>
+            <h2 id="quizResultMessage" class="text-2xl sm:text-3xl font-extrabold mt-1">Luar Biasa, Kamu Lulus!</h2>
+            <p id="quizResultSubtext" class="text-sm text-slate-500 dark:text-slate-400 mt-1">Selamat atas kerja kerasmu dalam menyelesaikan seluruh materi Sistem Komputer.</p>
+          </div>
+
+          <!-- Score Card -->
+          <div class="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800 max-w-sm mx-auto border border-slate-200 dark:border-slate-700">
+            <div class="text-xs text-slate-400 uppercase font-semibold">Skor Akhir Kamu</div>
+            <div id="quizFinalScore" class="text-5xl font-black text-indigo-600 dark:text-indigo-400 mt-1">100</div>
+            <div id="quizCorrectCount" class="text-xs text-slate-500 dark:text-slate-400 mt-2">15 dari 15 Pertanyaan Benar (100%)</div>
+          </div>
+
+          <!-- Buttons: Retake, Certificate, Review -->
+          <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
+            <button onclick="startQuiz()" class="px-5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold text-xs transition-colors flex items-center gap-2">
+              <i class="fa-solid fa-rotate-right"></i> Ulangi Kuis
+            </button>
+            <button onclick="showCertificateModal()" id="btnOpenCert" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold text-xs shadow-md hover:scale-105 active:scale-95 transition-all flex items-center gap-2">
+              <i class="fa-solid fa-certificate"></i> Lihat & Cetak Sertifikat
+            </button>
+            <button onclick="toggleReviewSection()" class="px-5 py-2.5 rounded-xl bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-bold text-xs border border-indigo-200 dark:border-indigo-800 transition-colors flex items-center gap-2">
+              <i class="fa-solid fa-list-check"></i> Pembahasan Soal
+            </button>
+          </div>
+
+          <!-- Discussion / Review Section -->
+          <div id="quizReviewSection" class="hidden text-left space-y-4 pt-6 border-t border-slate-200 dark:border-slate-800">
+            <h4 class="font-bold text-base text-slate-800 dark:text-slate-100 flex items-center gap-2">
+              <i class="fa-solid fa-clipboard-question text-indigo-500"></i>
+              Lembar Pembahasan Lengkap (15 Soal)
+            </h4>
+            <div id="quizReviewList" class="space-y-3">
+              <!-- Dynamically populated via app.js -->
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= TAB 5: GLOSARIUM ISTILAH ================= -->
+    <section id="tab-glosarium" class="tab-pane hidden py-8 sm:py-12">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        
+        <!-- Header Glosarium -->
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">Kamus Pintar</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight mt-1">Glosarium Sistem Komputer</h2>
+            <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">Daftar istilah penting seputar komputer beserta definisinya:</p>
+          </div>
+
+          <!-- Search Bar -->
+          <div class="relative w-full md:w-72">
+            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+            <input type="text" id="glossarySearch" oninput="filterGlossary()" placeholder="Cari istilah (contoh: ALU, ROM, Bit)..." class="w-full pl-9 pr-4 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+        </div>
+
+        <!-- Glossary Card Grid -->
+        <div id="glossaryGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <!-- Dynamically populated by app.js -->
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= MODAL: SERTIFIKAT KELULUSAN ================= -->
+  <div id="certificateModal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-2xl w-full border border-slate-200 dark:border-slate-800 shadow-2xl p-6 sm:p-8 space-y-6">
+      
+      <!-- Close Button -->
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+        <h3 class="font-bold text-base flex items-center gap-2">
+          <i class="fa-solid fa-award text-amber-500"></i>
+          Sertifikat Pencapaian Belajar
+        </h3>
+        <button onclick="closeCertificateModal()" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Printable Certificate Box -->
+      <div id="certificatePrintArea" class="relative p-8 rounded-2xl bg-gradient-to-br from-indigo-900 via-slate-900 to-indigo-950 text-white border-4 border-amber-400/80 shadow-2xl text-center space-y-4">
+        <!-- Gold Emblem -->
+        <div class="w-16 h-16 mx-auto rounded-full bg-gradient-to-tr from-amber-400 to-yellow-200 text-slate-950 flex items-center justify-center text-2xl shadow-lg shadow-amber-400/40">
+          <i class="fa-solid fa-star"></i>
+        </div>
+
+        <div>
+          <span class="text-xs font-bold tracking-widest text-amber-300 uppercase">Sertifikat Kelulusan Uji Kompetensi</span>
+          <h2 class="text-2xl font-black mt-1">INFORMATIKA SMP KELAS 8</h2>
+          <p class="text-xs text-indigo-200">Bab 4: Sistem Komputer • Kurikulum Merdeka</p>
+        </div>
+
+        <div class="py-2">
+          <span class="text-xs text-slate-300">Diberikan Kepada Siswa Berprestasi:</span>
+          <div id="certStudentName" class="text-2xl sm:text-3xl font-black text-amber-300 tracking-wide mt-1 uppercase border-b-2 border-amber-400/50 pb-2 inline-block max-w-full px-6">
+            Bagus Cakra
+          </div>
+        </div>
+
+        <p class="text-xs text-slate-300 max-w-md mx-auto leading-relaxed">
+          Telah berhasil menyelesaikan pembelajaran interaktif dan dinyatakan <strong class="text-emerald-400">LULUS KOMPETEN</strong> dalam pemahaman materi Hardware, Software, Brainware, Siklus Mesin CPU, serta Kodifikasi Sistem Bilangan Biner dengan skor:
+        </p>
+
+        <div class="inline-block px-5 py-2 rounded-xl bg-white/10 backdrop-blur border border-white/20">
+          <span class="text-xs text-slate-300">Nilai Kelulusan:</span>
+          <span id="certScoreDisplay" class="text-xl font-black text-amber-300 ml-2 font-mono">100 / 100</span>
+        </div>
+
+        <div class="pt-4 flex items-center justify-between text-[11px] text-slate-400 border-t border-indigo-800/80">
+          <div>Tanggal: <span id="certDateDisplay">12 Mei 2024</span></div>
+          <div>Verifikasi: <span class="font-mono text-cyan-300">SK8-MERDEKA-OK</span></div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex items-center justify-end gap-3 pt-2">
+        <button onclick="closeCertificateModal()" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-bold text-xs">
+          Tutup
+        </button>
+        <button onclick="printCertificate()" class="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs flex items-center gap-2 shadow">
+          <i class="fa-solid fa-print"></i>
+          <span>Cetak Sertifikat Ini</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= PRINTABLE SUMMARY SHEET (HIDDEN UNTIL PRINT) ================= -->
+  <div id="printableSummary" class="hidden print:block print:p-8 space-y-6 bg-white text-slate-900 font-sans">
+    <div class="border-b-2 border-slate-900 pb-4 text-center">
+      <h1 class="text-2xl font-black">RINGKASAN MATERI SISTEM KOMPUTER KELAS 8 (BAB 4)</h1>
+      <p class="text-xs text-slate-600">Mata Pelajaran Informatika • Kurikulum Merdeka SMP Fase D</p>
+    </div>
+
+    <div class="space-y-4 text-xs leading-relaxed">
+      <div>
+        <h2 class="font-bold text-sm text-indigo-800">1. Tiga Pilar Sistem Komputer</h2>
+        <p>• <strong>Hardware:</strong> Bagian fisik yang dapat dilihat dan diraba (CPU, Monitor, Mouse, RAM).</p>
+        <p>• <strong>Software:</strong> Program elektronik yang menjalankan instruksi (Sistem Operasi Windows/Linux, Browser, Office).</p>
+        <p>• <strong>Brainware:</strong> Manusia yang mengoperasikan komputer (Programmer, Administrator, Operator/Siswa).</p>
+      </div>
+
+      <div>
+        <h2 class="font-bold text-sm text-indigo-800">2. Klasifikasi Perangkat Keras (Hardware)</h2>
+        <p>• <strong>Input Device:</strong> Keyboard, Mouse, Scanner, Mikrofon, Kamera Webcam.</p>
+        <p>• <strong>Processing Device:</strong> CPU (ALU + CU + Register), GPU (Kartu Grafis), RAM, Motherboard.</p>
+        <p>• <strong>Output Device:</strong> Monitor, Printer, Speaker, Proyektor LCD.</p>
+        <p>• <strong>Storage Device:</strong> SSD (Solid State Drive), Harddisk (HDD), Flashdisk USB, Cloud Storage.</p>
+      </div>
+
+      <div>
+        <h2 class="font-bold text-sm text-indigo-800">3. Siklus Mesin CPU (Fetch - Decode - Execute - Store)</h2>
+        <p>1. <strong>Fetch:</strong> Control Unit mengambil instruksi dari RAM.</p>
+        <p>2. <strong>Decode:</strong> Menerjemahkan instruksi menjadi sinyal elektronik.</p>
+        <p>3. <strong>Execute:</strong> ALU mengeksekusi operasi logika/matematika.</p>
+        <p>4. <strong>Store:</strong> Menyimpan hasil kembali ke memori atau register.</p>
+      </div>
+
+      <div>
+        <h2 class="font-bold text-sm text-indigo-800">4. Bilangan Biner (0 dan 1) & Konversi 8-Bit</h2>
+        <p>Komputer hanya mengenal sinyal 0 (Off) dan 1 (On). 1 Byte = 8 Bit.</p>
+        <p>Bobot posisi 8-bit dari kiri ke kanan: <strong>128, 64, 32, 16, 8, 4, 2, 1</strong>.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-8 transition-colors duration-200 mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400">
+      <div class="flex items-center gap-2">
+        <div class="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs">
+          <i class="fa-solid fa-microchip"></i>
+        </div>
+        <span><strong>Media Pembelajaran Informatika SMP</strong> • Kelas 8 Bab 4 (Sistem Komputer)</span>
+      </div>
+      <div>
+        Dikembangkan sesuai <strong>Kurikulum Merdeka Kemendikbudristek RI</strong>
+      </div>
+    </div>
+  </footer>
+
+  <!-- App Script -->
+  <script src="app.js"></script>
+</body>
+</html>
