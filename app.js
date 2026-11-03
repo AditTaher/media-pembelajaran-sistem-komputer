@@ -191,20 +191,20 @@ function selectLabTab(labId) {
   if (activeBtn) activeBtn.classList.add('active');
 }
 
-// ================= LAB 1: HARDWARE SORTING GAME (WITH PHOTOS) =================
+// ================= LAB 1: HARDWARE SORTING GAME (WITH PHOTOS & FALLBACKS) =================
 const SORT_ITEMS = [
-  { id: 'item1', name: 'Keyboard', category: 'input', icon: 'fa-keyboard', img: 'assets/img/input_keyboard.jpg' },
-  { id: 'item2', name: 'Mouse Optik', category: 'input', icon: 'fa-computer-mouse', img: 'assets/img/input_mouse.jpg' },
-  { id: 'item3', name: 'Mikrofon', category: 'input', icon: 'fa-microphone', img: 'assets/img/input_microphone.jpg' },
-  { id: 'item4', name: 'CPU (Processor)', category: 'process', icon: 'fa-microchip', img: 'assets/img/process_cpu.jpg' },
-  { id: 'item5', name: 'RAM (DDR4/5)', category: 'process', icon: 'fa-memory', img: 'assets/img/process_ram.jpg' },
-  { id: 'item6', name: 'GPU (VGA Card)', category: 'process', icon: 'fa-gamepad', img: 'assets/img/process_gpu.jpg' },
-  { id: 'item7', name: 'Monitor LCD', category: 'output', icon: 'fa-desktop', img: 'assets/img/output_monitor.jpg' },
-  { id: 'item8', name: 'Printer Inkjet', category: 'output', icon: 'fa-print', img: 'assets/img/output_printer.jpg' },
-  { id: 'item9', name: 'Speaker Aktif', category: 'output', icon: 'fa-volume-high', img: 'assets/img/output_speaker.jpg' },
-  { id: 'item10', name: 'SSD NVMe', category: 'storage', icon: 'fa-bolt', img: 'assets/img/storage_ssd.jpg' },
-  { id: 'item11', name: 'Harddisk (HDD)', category: 'storage', icon: 'fa-compact-disc', img: 'assets/img/storage_hdd.jpg' },
-  { id: 'item12', name: 'Flashdisk USB', category: 'storage', icon: 'fa-brands fa-usb', img: 'assets/img/storage_flashdisk.jpg' },
+  { id: 'item1', name: 'Keyboard', category: 'input', icon: 'fa-keyboard', img: 'assets/img/input_keyboard.jpg', fallback: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=500&auto=format&fit=crop&q=80' },
+  { id: 'item2', name: 'Mouse Optik', category: 'input', icon: 'fa-computer-mouse', img: 'assets/img/input_mouse.jpg', fallback: 'https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?w=500&auto=format&fit=crop&q=80' },
+  { id: 'item3', name: 'Mikrofon', category: 'input', icon: 'fa-microphone', img: 'assets/img/input_microphone.jpg', fallback: 'https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=500&auto=format&fit=crop&q=80' },
+  { id: 'item4', name: 'CPU (Processor)', category: 'process', icon: 'fa-microchip', img: 'assets/img/process_cpu.jpg', fallback: 'https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=500&auto=format&fit=crop&q=80' },
+  { id: 'item5', name: 'RAM (DDR4/5)', category: 'process', icon: 'fa-memory', img: 'assets/img/process_ram.jpg', fallback: 'https://images.unsplash.com/photo-1562976540-1502c2145186?w=500&auto=format&fit=crop&q=80' },
+  { id: 'item6', name: 'GPU (VGA Card)', category: 'process', icon: 'fa-gamepad', img: 'assets/img/process_gpu.jpg', fallback: 'https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=500&auto=format&fit=crop&q=80' },
+  { id: 'item7', name: 'Monitor LCD', category: 'output', icon: 'fa-desktop', img: 'assets/img/output_monitor.jpg', fallback: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=500&auto=format&fit=crop&q=80' },
+  { id: 'item8', name: 'Printer Inkjet', category: 'output', icon: 'fa-print', img: 'assets/img/output_printer.jpg', fallback: 'https://images.unsplash.com/photo-1612815154858-60aa4c59eaa6?w=500&auto=format&fit=crop&q=80' },
+  { id: 'item9', name: 'Speaker Aktif', category: 'output', icon: 'fa-volume-high', img: 'assets/img/output_speaker.jpg', fallback: 'https://images.unsplash.com/photo-1545454675-3531b543be5d?w=500&auto=format&fit=crop&q=80' },
+  { id: 'item10', name: 'SSD NVMe', category: 'storage', icon: 'fa-bolt', img: 'assets/img/storage_ssd.jpg', fallback: 'https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=500&auto=format&fit=crop&q=80' },
+  { id: 'item11', name: 'Harddisk (HDD)', category: 'storage', icon: 'fa-compact-disc', img: 'assets/img/storage_hdd.jpg', fallback: 'https://images.unsplash.com/photo-1531492746076-161ca9bcad58?w=500&auto=format&fit=crop&q=80' },
+  { id: 'item12', name: 'Flashdisk USB', category: 'storage', icon: 'fa-brands fa-usb', img: 'assets/img/storage_flashdisk.jpg', fallback: 'https://images.unsplash.com/photo-1544652478-6653e09f18a2?w=500&auto=format&fit=crop&q=80' },
 ];
 
 let selectedSortItem = null;
@@ -260,7 +260,7 @@ function renderSortPool() {
         : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700 hover:border-indigo-400 hover:bg-indigo-50 dark:hover:bg-slate-750'
     }`;
     chip.innerHTML = `
-      <img src="${item.img}" alt="${item.name}" class="w-5 h-5 rounded-md object-cover">
+      <img src="${item.img}" onerror="this.onerror=null; this.src='${item.fallback}'" alt="${item.name}" class="w-5 h-5 rounded-md object-cover">
       <span>${item.name}</span>
     `;
     chip.onclick = (e) => {
@@ -290,12 +290,14 @@ function updateSelectionBar() {
     nameEl.innerHTML = `<span class="text-indigo-600 dark:text-indigo-400 underline font-black">${selectedSortItem.name}</span> (Siap ditempatkan)`;
     if (imgEl && selectedSortItem.img) {
       imgEl.src = selectedSortItem.img;
+      imgEl.onerror = () => { imgEl.src = selectedSortItem.fallback; };
       imgEl.classList.remove('hidden');
     }
   } else {
     nameEl.textContent = 'Pilih salah satu item di daftar';
     if (imgEl) {
       imgEl.src = 'assets/img/pilar_hardware.jpg';
+      imgEl.onerror = () => { imgEl.src = 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=500&auto=format&fit=crop&q=80'; };
     }
   }
 }
@@ -321,7 +323,7 @@ function handleCategoryDrop(targetCategory) {
       card.className = 'p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold flex items-center justify-between shadow-xs';
       card.innerHTML = `
         <span class="flex items-center gap-2">
-          <img src="${selectedSortItem.img}" class="w-6 h-6 object-cover rounded">
+          <img src="${selectedSortItem.img}" onerror="this.onerror=null; this.src='${selectedSortItem.fallback}'" class="w-6 h-6 object-cover rounded">
           <span>${selectedSortItem.name}</span>
         </span>
         <i class="fa-solid fa-check text-emerald-500 text-xs"></i>
