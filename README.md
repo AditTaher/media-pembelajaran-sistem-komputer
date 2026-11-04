@@ -39,4 +39,3 @@ Media Pembelajaran Interaktif berbasis web untuk Mata Pelajaran **Informatika SM
 
 ## 💻 Cara Menjalankan Secara Lokal
 Cukup buka berkas `index.html` dengan browser peramban apa saja (Chrome, Edge, Firefox, Safari). Tidak memerlukan server backend khusus.
-

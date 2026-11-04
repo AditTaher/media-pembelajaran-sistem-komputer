@@ -141,6 +141,11 @@ function switchTab(tabId) {
   const activeBtn = document.getElementById(`nav-${tabId}`);
   if (activeBtn) activeBtn.classList.add('active');
 
+  // If opening quiz, initialize quiz view
+  if (tabId === 'kuis') {
+    initQuizView();
+  }
+
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -582,387 +587,660 @@ function highlightStage(stageNum) {
   if (stage) stage.classList.add('active-stage');
 }
 
-// ================= KUIS EVALUASI (15 SOAL INFORMATIKA KELAS 8 BAB 4) =================
-const QUIZ_QUESTIONS = [
+// ================= KUIS EVALUASI 1 LEMBAR (10 SOAL ESSENTIAL KELAS 8 BAB 4) =================
+// Kunci jawaban tetap (tidak diacak) sesuai formula guru:
+// 1:A, 2:C, 3:A, 4:B, 5:C, 6:D, 7:B, 8:B, 9:A, 10:D
+//
+// Struktur tiap soal: options[0]=A, options[1]=B, options[2]=C, options[3]=D
+// Indeks correctLetter merujuk pada huruf kunci jawaban yang sudah ditetapkan.
+const RAW_QUIZ_QUESTIONS = [
   {
+    // Soal 1 — Kunci: A
+    id: 1,
     category: 'Tiga Pilar Komputer',
-    question: 'Sistem komputer tersusun atas tiga komponen utama yang saling berinteraksi. Ketiga komponen tersebut adalah...',
+    question: 'Sistem komputer terdiri atas tiga komponen utama yang saling berinteraksi, yaitu...',
     options: [
-      'Hardware, Software, dan Brainware',
-      'CPU, Monitor, dan Keyboard',
-      'Windows, Linux, dan MacOS',
-      'RAM, Harddisk, dan Processor'
+      'Hardware, Software, dan Brainware',  // A ← KUNCI
+      'Monitor, Keyboard, dan Mouse',       // B
+      'Windows, Linux, dan Microsoft Word', // C
+      'CPU, RAM, dan Harddisk'              // D
     ],
-    correct: 0,
-    explanation: 'Sistem komputer terdiri atas 3 pilar: Hardware (perangkat keras), Software (perangkat lunak), dan Brainware (manusia/pengguna). Ketiganya wajib ada agar sistem bekerja.'
+    correctLetter: 'A',
+    correctAnswer: 'Hardware, Software, dan Brainware',
+    explanation: 'Tiga pilar dasar sistem komputer adalah Hardware (perangkat keras fisik), Software (perangkat lunak/aplikasi), dan Brainware (manusia/pengguna).'
   },
   {
-    category: 'Hardware - Input',
-    question: 'Manakah di bawah ini yang seluruhnya merupakan perangkat masukan (Input Device)?',
+    // Soal 2 — Kunci: C
+    id: 2,
+    category: 'Hardware - Input Device',
+    question: 'Perangkat keras yang digunakan untuk memasukkan huruf, angka, dan teks perintah ke dalam komputer adalah...',
     options: [
-      'Keyboard, Mouse, dan Barcode Scanner',
-      'Monitor, Printer, dan Speaker',
-      'CPU, RAM, dan Motherboard',
-      'SSD, Flashdisk, dan Harddisk'
+      'Monitor',   // A
+      'Speaker',   // B
+      'Keyboard',  // C ← KUNCI
+      'Printer'    // D
     ],
-    correct: 0,
-    explanation: 'Keyboard, Mouse, dan Barcode Scanner bertugas memasukkan data dari luar ke dalam sistem komputer.'
+    correctLetter: 'C',
+    correctAnswer: 'Keyboard',
+    explanation: 'Keyboard adalah perangkat masukan (input) utama untuk mengetik karakter huruf, angka, dan simbol perintah.'
   },
   {
-    category: 'Hardware - Processing',
-    question: 'Komponen CPU yang bertanggung jawab langsung untuk melakukan perhitungan matematika dan perbandingan logika adalah...',
+    // Soal 3 — Kunci: A
+    id: 3,
+    category: 'Hardware - Processing Device',
+    question: 'Komponen yang sering disebut sebagai "otak komputer" karena bertugas memproses dan mengendalikan semua instruksi adalah...',
     options: [
-      'ALU (Arithmetic Logic Unit)',
-      'CU (Control Unit)',
-      'Register',
-      'Motherboard'
+      'CPU (Processor)', // A ← KUNCI
+      'Power Supply',    // B
+      'Casing Komputer', // C
+      'Kabel VGA'        // D
     ],
-    correct: 0,
-    explanation: 'ALU (Arithmetic Logic Unit) adalah bagian inti CPU yang mengeksekusi operasi aritmetika (+, -, *, /) dan logika (AND, OR, NOT).'
+    correctLetter: 'A',
+    correctAnswer: 'CPU (Processor)',
+    explanation: 'CPU (Central Processing Unit) atau processor adalah otak komputer yang memproses seluruh data dan kalkulasi komputasi.'
   },
   {
-    category: 'Hardware - Memory',
-    question: 'Memori komputer yang bersifat volatile (data di dalamnya akan hilang seketika saat arus listrik padam) adalah...',
+    // Soal 4 — Kunci: B
+    id: 4,
+    category: 'Hardware - Memori',
+    question: 'Memori komputer yang bersifat sementara (data di dalamnya akan hilang saat komputer dimatikan) adalah...',
     options: [
-      'RAM (Random Access Memory)',
-      'ROM (Read Only Memory)',
-      'SSD (Solid State Drive)',
-      'Harddisk Drive (HDD)'
+      'Harddisk Drive (HDD)',       // A
+      'RAM (Random Access Memory)', // B ← KUNCI
+      'Flashdisk USB',              // C
+      'Solid State Drive (SSD)'     // D
     ],
-    correct: 0,
-    explanation: 'RAM bersifat volatile karena hanya menyimpan data sementara dari aplikasi yang sedang berjalan saat ada daya listrik.'
+    correctLetter: 'B',
+    correctAnswer: 'RAM (Random Access Memory)',
+    explanation: 'RAM bersifat volatile, artinya data yang sedang berjalan hanya tersimpan sementara selama ada aliran daya listrik.'
   },
   {
-    category: 'Hardware - Storage',
-    question: 'Kelebihan utama SSD (Solid State Drive) dibandingkan dengan Harddisk konvensional (HDD) adalah...',
+    // Soal 5 — Kunci: C
+    id: 5,
+    category: 'Hardware - Storage Device',
+    question: 'Perangkat keras yang digunakan untuk menyimpan dokumen, foto, dan program secara permanen adalah...',
     options: [
-      'Kecepatan baca-tulis jauh lebih tinggi dan tahan guncangan karena menggunakan chip memori flash tanpa piringan berputar',
-      'Kapasitasnya selalu lebih besar dengan harga yang jauh lebih murah',
-      'Bisa bekerja meskipun tidak dihubungkan ke motherboard',
-      'Dapat menyimpan data tanpa memerlukan ruang memori'
+      'Monitor Layar',  // A
+      'Speaker Audio',  // B
+      'Harddisk / SSD', // C ← KUNCI
+      'Kamera Webcam'   // D
     ],
-    correct: 0,
-    explanation: 'SSD menggunakan chip flash tanpa piringan mekanik berputar, menjadikannya jauh lebih cepat, hening, dan tahan guncangan dibandingkan HDD.'
+    correctLetter: 'C',
+    correctAnswer: 'Harddisk / SSD',
+    explanation: 'Harddisk (HDD) dan Solid State Drive (SSD) merupakan media penyimpanan sekunder permanen (non-volatile) pada komputer.'
   },
   {
+    // Soal 6 — Kunci: D
+    id: 6,
+    category: 'Hardware - Output Device',
+    question: 'Perangkat keluaran (output) yang berfungsi menampilkan gambar, teks, dan video secara visual kepada pengguna adalah...',
+    options: [
+      'Mouse',    // A
+      'Mikrofon', // B
+      'Scanner',  // C
+      'Monitor'   // D ← KUNCI
+    ],
+    correctLetter: 'D',
+    correctAnswer: 'Monitor',
+    explanation: 'Monitor menampilkan antarmuka visual grafik dan hasil olahan sistem komputer secara langsung ke layar pandang pengguna.'
+  },
+  {
+    // Soal 7 — Kunci: B
+    id: 7,
     category: 'Software - Sistem Operasi',
-    question: 'Perangkat lunak dasar yang pertama kali dijalankan saat komputer menyala dan bertindak sebagai pengelola sumber daya komputer adalah...',
+    question: 'Contoh perangkat lunak sistem operasi yang mengelola kerja komputer atau smartphone adalah...',
     options: [
-      'Sistem Operasi (Operating System)',
-      'Program Aplikasi Pengolah Kata',
-      'Antivirus',
-      'Web Browser'
+      'Microsoft Word dan Excel',    // A
+      'Windows, Linux, dan Android', // B ← KUNCI
+      'Google Chrome dan Safari',    // C
+      'CapCut dan Photoshop'         // D
     ],
-    correct: 0,
-    explanation: 'Sistem Operasi (seperti Windows, Linux, Android) adalah platform fundamental yang mengelola hardware dan memfasilitasi jalannya aplikasi.'
+    correctLetter: 'B',
+    correctAnswer: 'Windows, Linux, dan Android',
+    explanation: 'Windows, Linux, MacOS, dan Android merupakan contoh Sistem Operasi (Operating System) yang menjembatani hardware dan aplikasi.'
   },
   {
-    category: 'Software - Interface',
-    question: 'Antarmuka komputer yang memungkinkan pengguna berinteraksi melalui ikon visual, menu grafis, tombol, dan kursor mouse disebut...',
+    // Soal 8 — Kunci: B
+    id: 8,
+    category: 'Brainware (Pengguna)',
+    question: 'Seseorang yang memiliki keahlian menulis kode perintah program komputer dengan bahasa pemrograman disebut...',
     options: [
-      'GUI (Graphical User Interface)',
-      'CLI (Command Line Interface)',
-      'BIOS (Basic Input Output System)',
-      'API (Application Programming Interface)'
+      'Teknisi Listrik',  // A
+      'Programmer',       // B ← KUNCI
+      'Operator Fotokopi',// C
+      'Kurir Paket'       // D
     ],
-    correct: 0,
-    explanation: 'GUI (Graphical User Interface) menyajikan elemen grafis ramah pengguna seperti jendela, ikon, dan kursor mouse.'
+    correctLetter: 'B',
+    correctAnswer: 'Programmer',
+    explanation: 'Programmer adalah unsur brainware yang merancang, menulis kode, dan mengembangkan perangkat lunak (software).'
   },
   {
-    category: 'Brainware',
-    question: 'Seseorang yang bertugas merancang, menulis kode, dan mengembangkan program aplikasi baru pada komputer disebut...',
-    options: [
-      'Programmer',
-      'Administrator Jaringan',
-      'Operator',
-      'Teknisi Hardware'
-    ],
-    correct: 0,
-    explanation: 'Programmer adalah profesi brainware yang menciptakan software dengan menulis instruksi kode dalam bahasa pemrograman.'
-  },
-  {
-    category: 'Siklus Mesin CPU',
-    question: 'Urutan siklus kerja mesin CPU yang benar ketika menjalankan instruksi instruksi adalah...',
-    options: [
-      'Fetch ➔ Decode ➔ Execute ➔ Store',
-      'Input ➔ Output ➔ Process ➔ Save',
-      'Execute ➔ Fetch ➔ Store ➔ Decode',
-      'Compile ➔ Run ➔ Debug ➔ Close'
-    ],
-    correct: 0,
-    explanation: 'Siklus mesin CPU (Machine Cycle) terdiri dari 4 tahap: Fetch (mengambil data dari RAM), Decode (menerjemahkan), Execute (eksekusi perhitungan), dan Store (menyimpan hasil).'
-  },
-  {
-    category: 'Siklus IPOS',
-    question: 'Dalam siklus pengolahan data IPOS, huruf "O" merupakan singkatan dari...',
-    options: [
-      'Output (Keluaran)',
-      'Operation (Operasi)',
-      'Optimization (Optimalisasi)',
-      'Overclock (Peningkatan Frekuensi)'
-    ],
-    correct: 0,
-    explanation: 'IPOS adalah singkatan dari Input ➔ Process ➔ Output ➔ Storage.'
-  },
-  {
-    category: 'Bilangan Biner',
+    // Soal 9 — Kunci: A
+    id: 9,
+    category: 'Sistem Bilangan Biner',
     question: 'Sistem bilangan biner merupakan bahasa mesin komputer yang hanya terdiri atas dua angka, yaitu...',
     options: [
-      '0 dan 1',
-      '1 dan 2',
-      '0 sampai 9',
-      '0 sampai 7'
+      '0 dan 1',    // A ← KUNCI
+      '1 dan 2',    // B
+      '0 sampai 9', // C
+      'A dan B'     // D
     ],
-    correct: 0,
-    explanation: 'Sistem bilangan biner (basis 2) hanya mengenal angka 0 (keadaan listrik mati/OFF) dan 1 (keadaan listrik nyala/ON).'
+    correctLetter: 'A',
+    correctAnswer: '0 dan 1',
+    explanation: 'Sistem bilangan biner (basis 2) hanya mengenal angka 0 (sinyal off/mati) dan 1 (sinyal on/hidup).'
   },
   {
-    category: 'Satuan Memori',
-    question: 'Satu Byte (Bita) terdiri atas sekumpulan bit sebanyak...',
+    // Soal 10 — Kunci: D
+    id: 10,
+    category: 'Siklus Kerja Komputer',
+    question: 'Tahapan dasar pemrosesan data komputer yang disingkat IPOS adalah urutan dari...',
     options: [
-      '8 Bit',
-      '4 Bit',
-      '16 Bit',
-      '1.024 Bit'
+      'Internet ➔ Program ➔ Online ➔ Server',  // A
+      'Install ➔ Play ➔ Open ➔ Save',          // B
+      'Internal ➔ Public ➔ Offline ➔ Setup',   // C
+      'Input ➔ Process ➔ Output ➔ Storage'     // D ← KUNCI
     ],
-    correct: 0,
-    explanation: '1 Byte terdiri atas 8 Bit, yang merupakan standar minimum untuk menyimpan satu karakter karakter teks (ASCII).'
-  },
-  {
-    category: 'Konversi Biner',
-    question: 'Berapakah nilai desimal dari bilangan biner 8-bit berikut: 00001101?',
-    options: [
-      '13',
-      '11',
-      '15',
-      '9'
-    ],
-    correct: 0,
-    explanation: 'Perhitungan: (1 × 8) + (1 × 4) + (0 × 2) + (1 × 1) = 8 + 4 + 1 = 13.'
-  },
-  {
-    category: 'Hardware - Output',
-    question: 'Perangkat berikut yang menghasilkan salinan fisik di atas kertas (hardcopy) dari hasil olahan data komputer adalah...',
-    options: [
-      'Printer',
-      'Monitor',
-      'Proyektor',
-      'Speaker'
-    ],
-    correct: 0,
-    explanation: 'Printer mencetak dokumen ke kertas dalam bentuk wujud nyata (hardcopy), sedangkan monitor dan proyektor menampilkan softcopy.'
-  },
-  {
-    category: 'Software - Utilitas',
-    question: 'Perangkat lunak yang berfungsi untuk melindungi sistem komputer dari serangan virus, malware, dan ancaman berbahaya lainnya adalah program...',
-    options: [
-      'Antivirus (Utilitas Keamanan)',
-      'Sistem Operasi',
-      'Spreadsheet Excel',
-      'Compiler Bahasa C'
-    ],
-    correct: 0,
-    explanation: 'Antivirus adalah contoh perangkat lunak utilitas yang memelihara keamanan data dan stabilitas sistem operasi dari serangan malware.'
+    correctLetter: 'D',
+    correctAnswer: 'Input ➔ Process ➔ Output ➔ Storage',
+    explanation: 'Siklus IPOS merupakan alur pengolahan data: Input (masukan) ➔ Process (pemrosesan) ➔ Output (keluaran) ➔ Storage (penyimpanan).'
   }
 ];
 
-let currentQuestionIndex = 0;
-let userAnswers = [];
-let quizScore = 0;
-let isAnswerSubmitted = false;
+// State Kuis 1 Lembar
+let activeSheetQuestions = []; // Berisi 10 soal dengan opsi yang sudah teracak A, B, C, D
+let studentSelectedAnswers = {}; // Map nomor soal (1-10) => huruf pilihan ('A'/'B'/'C'/'D')
+const TEACHER_RESET_PIN = '8888';
 
-function startQuiz() {
-  playClickSound();
-  const nameInput = document.getElementById('studentNameInput');
-  const studentName = nameInput && nameInput.value.trim() ? nameInput.value.trim() : 'Siswa Berprestasi';
-  localStorage.setItem('sk8_student_name', studentName);
-
-  currentQuestionIndex = 0;
-  userAnswers = new Array(QUIZ_QUESTIONS.length).fill(null);
-  quizScore = 0;
-  isAnswerSubmitted = false;
-
-  document.getElementById('quizStartScreen').classList.add('hidden');
-  document.getElementById('quizResultScreen').classList.add('hidden');
-  document.getElementById('quizPlayScreen').classList.remove('hidden');
-
-  renderQuestion();
+// Helper Acak Array (Fisher-Yates)
+function shuffleArray(array) {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
 }
 
-function renderQuestion() {
-  isAnswerSubmitted = false;
-  const q = QUIZ_QUESTIONS[currentQuestionIndex];
-  if (!q) return;
+// Inisialisasi Tampilan Kuis (Cek Device Lock)
+function initQuizView() {
+  const isSubmitted = localStorage.getItem('sk8_quiz_submitted') === 'true';
 
-  // Counter & Progress
-  document.getElementById('quizQuestionNumber').textContent = `Soal ${currentQuestionIndex + 1} dari ${QUIZ_QUESTIONS.length}`;
-  document.getElementById('quizScorePreview').textContent = `Skor Sementara: ${quizScore}`;
-  const pct = ((currentQuestionIndex + 1) / QUIZ_QUESTIONS.length) * 100;
-  document.getElementById('quizProgressBar').style.width = `${pct}%`;
+  const lockedView = document.getElementById('quizLockedView');
+  const sheetView = document.getElementById('quizSheetView');
+  const resultView = document.getElementById('quizResultView');
 
-  // Question Info
-  document.getElementById('quizCategoryBadge').textContent = `Kategori: ${q.category}`;
-  document.getElementById('quizQuestionText').textContent = q.question;
+  if (isSubmitted) {
+    // Tampilkan layar terkunci (1 device 1x submit)
+    if (sheetView) sheetView.classList.add('hidden');
+    if (resultView) resultView.classList.add('hidden');
+    if (lockedView) {
+      lockedView.classList.remove('hidden');
+      populateLockedViewData();
+    }
+  } else {
+    // Tampilkan lembar form kuis
+    if (lockedView) lockedView.classList.add('hidden');
+    if (resultView) resultView.classList.add('hidden');
+    if (sheetView) {
+      sheetView.classList.remove('hidden');
+      if (activeSheetQuestions.length === 0) {
+        renderQuizSheet();
+      }
+    }
+  }
+}
 
-  // Render Options
-  const optContainer = document.getElementById('quizOptionsContainer');
-  optContainer.innerHTML = '';
+// Mengisi data ringkasan submission pada tampilan layar terkunci
+function populateLockedViewData() {
+  try {
+    const rawData = localStorage.getItem('sk8_quiz_data');
+    if (!rawData) return;
+    const data = JSON.parse(rawData);
+
+    const nameEl = document.getElementById('lockedStudentName');
+    const classEl = document.getElementById('lockedStudentClass');
+    const timeEl = document.getElementById('lockedSubmitTime');
+    const scoreEl = document.getElementById('lockedScoreDisplay');
+
+    if (nameEl) nameEl.textContent = data.nama || 'Siswa';
+    if (classEl) classEl.textContent = `${data.kelas || '-'} • No. Absen ${data.no_absen || '-'}`;
+    if (timeEl) timeEl.textContent = data.timestamp || '-';
+    if (scoreEl) scoreEl.textContent = `${data.nilai || 0} / 100`;
+  } catch (err) {
+    console.error('Gagal membaca data kuis tersimpan:', err);
+  }
+}
+
+// Render 10 Soal dalam 1 Lembar Penuh dengan Pilihan Teracak (A, B, C, D)
+function renderQuizSheet() {
+  const container = document.getElementById('quizQuestionsContainer');
+  if (!container) return;
+  container.innerHTML = '';
+  studentSelectedAnswers = {};
 
   const letters = ['A', 'B', 'C', 'D'];
-  q.options.forEach((optText, optIdx) => {
-    const btn = document.createElement('button');
-    btn.className = 'quiz-opt-btn w-full p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-left font-semibold text-xs sm:text-sm flex items-start gap-3 transition-all';
-    btn.innerHTML = `
-      <span class="w-6 h-6 rounded-lg bg-indigo-100 dark:bg-slate-700 text-indigo-700 dark:text-indigo-300 font-bold flex items-center justify-center flex-shrink-0 text-xs">
-        ${letters[optIdx]}
-      </span>
-      <span class="flex-grow pt-0.5 text-slate-800 dark:text-slate-200">${optText}</span>
-    `;
-    btn.onclick = () => selectQuizOption(optIdx);
-    optContainer.appendChild(btn);
+
+  // Gunakan urutan pilihan yang sudah ditetapkan guru (tidak diacak)
+  // Kunci jawaban sudah tertanam di field correctLetter & options tiap soal
+  activeSheetQuestions = RAW_QUIZ_QUESTIONS.map((q, idx) => {
+    return {
+      index: idx + 1,
+      id: q.id,
+      category: q.category,
+      question: q.question,
+      options: q.options,              // Urutan A/B/C/D sudah tetap sesuai formula
+      correctLetter: q.correctLetter,  // Huruf kunci sesuai penetapan guru
+      correctAnswer: q.correctAnswer,
+      explanation: q.explanation
+    };
   });
 
-  // Hide feedback & next button
-  const fb = document.getElementById('quizFeedbackBox');
-  fb.classList.add('hidden');
-  fb.innerHTML = '';
-  document.getElementById('quizNextBtn').classList.add('hidden');
+  // Render kartu soal berurutan ke bawah dalam 1 lembar
+  activeSheetQuestions.forEach(q => {
+    const card = document.createElement('div');
+    card.id = `quizCard-${q.index}`;
+    card.className = 'bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-7 border border-slate-200 dark:border-slate-800 shadow-lg space-y-4 transition-all';
+
+    let optionsHtml = '';
+    letters.forEach((letter, optIdx) => {
+      const optText = q.options[optIdx];
+      optionsHtml += `
+        <div 
+          onclick="selectSheetOption(${q.index}, '${letter}')" 
+          id="qOpt-${q.index}-${letter}"
+          class="quiz-sheet-option p-3.5 sm:p-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 flex items-start gap-3 select-none">
+          <div class="option-badge w-7 h-7 rounded-xl bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold flex items-center justify-center flex-shrink-0 text-xs transition-colors">
+            ${letter}
+          </div>
+          <div class="pt-0.5 text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-200 flex-grow leading-relaxed">
+            ${optText}
+          </div>
+        </div>
+      `;
+    });
+
+    card.innerHTML = `
+      <div class="flex items-center justify-between gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
+        <div class="flex items-center gap-2">
+          <span class="w-7 h-7 rounded-lg bg-indigo-600 text-white font-extrabold text-xs flex items-center justify-center">
+            ${q.index}
+          </span>
+          <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-900">
+            ${q.category}
+          </span>
+        </div>
+        <span id="badgeStatus-${q.index}" class="text-[11px] font-semibold text-slate-400">
+          Belum dijawab
+        </span>
+      </div>
+
+      <div class="text-sm sm:text-base font-bold text-slate-800 dark:text-slate-100 leading-snug">
+        ${q.question}
+      </div>
+
+      <div class="grid grid-cols-1 gap-2.5 pt-1">
+        ${optionsHtml}
+      </div>
+    `;
+
+    container.appendChild(card);
+  });
+
+  updateQuizProgressText();
 }
 
-function selectQuizOption(selectedIdx) {
-  if (isAnswerSubmitted) return;
-  isAnswerSubmitted = true;
+// Memilih Pilihan Jawaban pada Satu Lembar Kuis
+function selectSheetOption(questionIndex, selectedLetter) {
+  playClickSound();
+  studentSelectedAnswers[questionIndex] = selectedLetter;
 
-  const q = QUIZ_QUESTIONS[currentQuestionIndex];
-  const isCorrect = selectedIdx === q.correct;
-  userAnswers[currentQuestionIndex] = {
-    selected: selectedIdx,
-    isCorrect: isCorrect
-  };
-
-  const optionButtons = document.querySelectorAll('.quiz-opt-btn');
-  optionButtons.forEach((btn, idx) => {
-    btn.disabled = true;
-    if (idx === q.correct) {
-      btn.classList.add('correct');
-    } else if (idx === selectedIdx && !isCorrect) {
-      btn.classList.add('wrong');
+  // Hapus seleksi aktif sebelumnya untuk nomor soal ini
+  const letters = ['A', 'B', 'C', 'D'];
+  letters.forEach(l => {
+    const optEl = document.getElementById(`qOpt-${questionIndex}-${l}`);
+    if (optEl) {
+      optEl.classList.remove('selected');
     }
   });
 
-  if (isCorrect) {
-    quizScore += Math.round(100 / QUIZ_QUESTIONS.length);
-    playCorrectSound();
-  } else {
-    playWrongSound();
+  // Berikan kelas selected pada opsi yang baru diklik
+  const activeOpt = document.getElementById(`qOpt-${questionIndex}-${selectedLetter}`);
+  if (activeOpt) {
+    activeOpt.classList.add('selected');
   }
 
-  // Show explanation feedback
-  const fb = document.getElementById('quizFeedbackBox');
-  fb.classList.remove('hidden', 'bg-emerald-50', 'border-emerald-200', 'text-emerald-900', 'bg-rose-50', 'border-rose-200', 'text-rose-900', 'dark:bg-emerald-950/40', 'dark:border-emerald-800', 'dark:text-emerald-200', 'dark:bg-rose-950/40', 'dark:border-rose-800', 'dark:text-rose-200');
-
-  if (isCorrect) {
-    fb.classList.add('bg-emerald-50', 'border-emerald-200', 'text-emerald-900', 'dark:bg-emerald-950/40', 'dark:border-emerald-800', 'dark:text-emerald-200');
-    fb.innerHTML = `
-      <div class="font-bold flex items-center gap-1.5 mb-1"><i class="fa-solid fa-circle-check text-emerald-500"></i> Jawabanmu Benar!</div>
-      <p class="text-xs opacity-90">${q.explanation}</p>
-    `;
-  } else {
-    fb.classList.add('bg-rose-50', 'border-rose-200', 'text-rose-900', 'dark:bg-rose-950/40', 'dark:border-rose-800', 'dark:text-rose-200');
-    fb.innerHTML = `
-      <div class="font-bold flex items-center gap-1.5 mb-1"><i class="fa-solid fa-circle-xmark text-rose-500"></i> Jawaban Kurang Tepat!</div>
-      <p class="text-xs opacity-90"><strong>Pembahasan:</strong> ${q.explanation}</p>
-    `;
+  // Update status badge soal
+  const badge = document.getElementById(`badgeStatus-${questionIndex}`);
+  if (badge) {
+    badge.innerHTML = `<span class="text-emerald-600 dark:text-emerald-400 font-bold"><i class="fa-solid fa-check mr-1"></i>Pilihan (${selectedLetter})</span>`;
   }
 
-  // Show next button
-  const nextBtn = document.getElementById('quizNextBtn');
-  nextBtn.classList.remove('hidden');
-  if (currentQuestionIndex === QUIZ_QUESTIONS.length - 1) {
-    nextBtn.innerHTML = 'Lihat Hasil Akhir <i class="fa-solid fa-flag-checkered ml-1"></i>';
-  } else {
-    nextBtn.innerHTML = 'Pertanyaan Berikutnya ➔';
+  // Hilangkan pesan error jika ada
+  hideQuizValidationWarning();
+
+  // Update indikator progres
+  updateQuizProgressText();
+}
+
+// Update teks jumlah soal yang sudah terjawab
+function updateQuizProgressText() {
+  const answeredCount = Object.keys(studentSelectedAnswers).length;
+  const total = activeSheetQuestions.length || 10;
+  const progressEl = document.getElementById('quizProgressText');
+  if (progressEl) {
+    progressEl.textContent = `${answeredCount} dari ${total} Soal Terjawab`;
+    if (answeredCount === total) {
+      progressEl.innerHTML = `<span class="text-emerald-600 dark:text-emerald-400"><i class="fa-solid fa-circle-check mr-1"></i>Seluruh ${total} Soal Sudah Terjawab!</span>`;
+    }
   }
 }
 
-function nextQuizQuestion() {
+// Scroll halus ke tombol kumpulkan
+function scrollToSubmitBtn() {
+  const anchor = document.getElementById('submitAnchor');
+  if (anchor) {
+    anchor.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+}
+
+// Menampilkan pesan validasi
+function showQuizValidationWarning(msg) {
+  const warn = document.getElementById('quizValidationWarning');
+  const text = document.getElementById('quizWarningMessage');
+  if (warn && text) {
+    text.textContent = msg;
+    warn.classList.remove('hidden');
+    warn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  playWrongSound();
+}
+
+function hideQuizValidationWarning() {
+  const warn = document.getElementById('quizValidationWarning');
+  if (warn) warn.classList.add('hidden');
+}
+
+// ================= SUBMIT KUIS 1 LEMBAR =================
+function submitQuizSheet() {
   playClickSound();
-  if (currentQuestionIndex < QUIZ_QUESTIONS.length - 1) {
-    currentQuestionIndex++;
-    renderQuestion();
-  } else {
-    finishQuiz();
+
+  // 1. Validasi Identitas Siswa
+  const nameInput = document.getElementById('quizStudentName');
+  const classInput = document.getElementById('quizStudentClass');
+  const numberInput = document.getElementById('quizStudentNumber');
+
+  const studentName = nameInput ? nameInput.value.trim() : '';
+  const studentClass = classInput ? classInput.value.trim() : '';
+  const studentNumber = numberInput ? numberInput.value.trim() : '';
+
+  if (!studentName) {
+    showQuizValidationWarning('Silakan isi Nama Lengkap terlebih dahulu!');
+    nameInput?.focus();
+    return;
   }
+
+  if (!studentClass) {
+    showQuizValidationWarning('Silakan pilih Kelas kamu!');
+    classInput?.focus();
+    return;
+  }
+
+  if (!studentNumber || isNaN(studentNumber) || Number(studentNumber) < 1) {
+    showQuizValidationWarning('Silakan masukkan Nomor Absen yang valid (contoh: 1 - 40)!');
+    numberInput?.focus();
+    return;
+  }
+
+  // 2. Validasi Seluruh 10 Soal Harus Terjawab
+  const totalQuestions = activeSheetQuestions.length;
+  const unanswered = [];
+  for (let i = 1; i <= totalQuestions; i++) {
+    if (!studentSelectedAnswers[i]) {
+      unanswered.push(i);
+    }
+  }
+
+  if (unanswered.length > 0) {
+    showQuizValidationWarning(`Kamu belum menjawab soal nomor: ${unanswered.join(', ')}. Harap lengkapi semua soal sebelum mengumpulkan!`);
+    const firstUnansweredCard = document.getElementById(`quizCard-${unanswered[0]}`);
+    if (firstUnansweredCard) {
+      firstUnansweredCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      firstUnansweredCard.classList.add('ring-2', 'ring-rose-500');
+      setTimeout(() => firstUnansweredCard.classList.remove('ring-2', 'ring-rose-500'), 2500);
+    }
+    return;
+  }
+
+  // Konfirmasi sebelum submit permanen
+  if (!confirm(`Konfirmasi Pengumpulan Kuis:\nNama: ${studentName}\nKelas: ${studentClass} (No. ${studentNumber})\n\nApakah kamu sudah yakin dengan semua jawabanmu? Perangkat ini hanya dapat mengirim 1 kali!`)) {
+    return;
+  }
+
+  // 3. Hitung Skor & Siapkan Data
+  let correctCount = 0;
+  const answerBreakdown = [];
+  const keySummaryList = [];
+
+  activeSheetQuestions.forEach(q => {
+    const studentChoice = studentSelectedAnswers[q.index];
+    const isCorrect = studentChoice === q.correctLetter;
+    if (isCorrect) correctCount++;
+
+    keySummaryList.push(`${q.index}:${q.correctLetter}`);
+    answerBreakdown.push({
+      nomor: q.index,
+      soal: q.question,
+      kategori: q.category,
+      pilihanSiswa: studentChoice,
+      kunciJawaban: q.correctLetter,
+      teksKunci: q.correctAnswer,
+      benar: isCorrect,
+      pembahasan: q.explanation
+    });
+  });
+
+  const finalScore = Math.round((correctCount / totalQuestions) * 100);
+  const timestampStr = new Date().toLocaleString('id-ID', {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+
+  // Detail String untuk dikirim ke Google Sheet
+  const answerKeySummary = keySummaryList.join(', '); // Contoh: 1:A, 2:C, 3:B, ...
+  const detailBreakdownString = answerBreakdown
+    .map(b => `[No ${b.nomor}: ${b.benar ? 'BENAR' : 'SALAH'} (Siswa: ${b.pilihanSiswa}, Kunci: ${b.kunciJawaban})]`)
+    .join(' ');
+
+  // 4. Kunci Device di LocalStorage (1 Device = 1 Kali Submit)
+  const submissionRecord = {
+    nama: studentName,
+    kelas: studentClass,
+    no_absen: studentNumber,
+    nilai: finalScore,
+    benar: correctCount,
+    total: totalQuestions,
+    timestamp: timestampStr,
+    kunci_jawaban: answerKeySummary,
+    detail: detailBreakdownString,
+    active_questions: activeSheetQuestions,
+    student_answers: studentSelectedAnswers
+  };
+
+  localStorage.setItem('sk8_quiz_submitted', 'true');
+  localStorage.setItem('sk8_quiz_data', JSON.stringify(submissionRecord));
+  localStorage.setItem('sk8_student_name', studentName);
+  localStorage.setItem('sk8_student_class', studentClass);
+  localStorage.setItem('sk8_student_no', studentNumber);
+
+  // 5. Kirimkan Payload ke Google Sheet (Google Apps Script Web App)
+  postToGoogleSheet(submissionRecord);
+
+  // 6. Tampilkan Layar Hasil Akhir
+  displayQuizResult(submissionRecord);
 }
 
-function finishQuiz() {
-  // Ensure score capped at 100 if all correct
-  const correctCount = userAnswers.filter(a => a && a.isCorrect).length;
-  const finalScore = Math.round((correctCount / QUIZ_QUESTIONS.length) * 100);
+// Mengirimkan Data ke Google Apps Script Web App
+function postToGoogleSheet(record) {
+  const sheetStatusEl = document.getElementById('resultSheetStatus');
+  if (sheetStatusEl) {
+    sheetStatusEl.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> Menyimpan ke Sheet...';
+    sheetStatusEl.className = 'text-xs font-bold text-amber-500 mt-3 flex items-center justify-center gap-1';
+  }
 
-  document.getElementById('quizPlayScreen').classList.add('hidden');
-  document.getElementById('quizResultScreen').classList.remove('hidden');
+  // URL Google Apps Script yang tersimpan atau default
+  const savedUrl = localStorage.getItem('sk8_gas_url');
 
-  document.getElementById('quizFinalScore').textContent = finalScore;
-  document.getElementById('quizCorrectCount').textContent = `${correctCount} dari ${QUIZ_QUESTIONS.length} Pertanyaan Benar (${finalScore}%)`;
+  if (!savedUrl) {
+    // Belum disetel oleh guru, data tetap aman tersimpan di localStorage
+    if (sheetStatusEl) {
+      sheetStatusEl.innerHTML = '<i class="fa-solid fa-circle-info mr-1"></i> Tersimpan Lokal';
+      sheetStatusEl.className = 'text-xs font-bold text-slate-500 dark:text-slate-400 mt-3 flex items-center justify-center gap-1';
+    }
+    return;
+  }
 
-  const msg = document.getElementById('quizResultMessage');
-  const sub = document.getElementById('quizResultSubtext');
-  const iconBox = document.getElementById('quizResultBadgeIcon');
+  const payload = {
+    action: 'submitQuiz',
+    nama: record.nama,
+    kelas: record.kelas,
+    no_absen: record.no_absen,
+    nilai: record.nilai,
+    benar: record.benar,
+    total: record.total,
+    timestamp: record.timestamp
+  };
+
+  fetch(savedUrl, {
+    method: 'POST',
+    mode: 'no-cors', // Penting agar CORS Google Script tidak diblokir browser
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  })
+  .then(() => {
+    if (sheetStatusEl) {
+      sheetStatusEl.innerHTML = '<i class="fa-solid fa-circle-check mr-1 text-emerald-500"></i> Terkirim ke Sheet';
+      sheetStatusEl.className = 'text-xs font-bold text-emerald-600 dark:text-emerald-400 mt-3 flex items-center justify-center gap-1';
+    }
+  })
+  .catch(err => {
+    console.warn('Gagal POST ke Google Apps Script:', err);
+    if (sheetStatusEl) {
+      sheetStatusEl.innerHTML = '<i class="fa-solid fa-triangle-exclamation mr-1 text-amber-500"></i> Tersimpan di Device';
+      sheetStatusEl.className = 'text-xs font-bold text-amber-500 mt-3 flex items-center justify-center gap-1';
+    }
+  });
+}
+
+// Menampilkan View Hasil Akhir (View 3)
+function displayQuizResult(record) {
+  const sheetView = document.getElementById('quizSheetView');
+  const lockedView = document.getElementById('quizLockedView');
+  const resultView = document.getElementById('quizResultView');
+
+  if (sheetView) sheetView.classList.add('hidden');
+  if (lockedView) lockedView.classList.add('hidden');
+  if (resultView) resultView.classList.remove('hidden');
+
+  const scoreEl = document.getElementById('resultFinalScore');
+  const correctEl = document.getElementById('resultCorrectCount');
+  const headingEl = document.getElementById('resultStatusHeading');
+  const subtextEl = document.getElementById('resultStatusSubtext');
+  const badgeIcon = document.getElementById('resultBadgeIcon');
   const certBtn = document.getElementById('btnOpenCert');
 
-  if (finalScore >= 75) {
-    msg.textContent = 'Selamat, Kamu Lulus Kompeten!';
-    sub.textContent = 'Kamu telah menguasai konsep dasar materi Sistem Komputer Kelas 8 dengan sangat baik.';
-    iconBox.className = 'w-20 h-20 mx-auto rounded-3xl bg-emerald-500 text-white flex items-center justify-center text-4xl shadow-lg shadow-emerald-500/30';
-    iconBox.innerHTML = '<i class="fa-solid fa-trophy"></i>';
+  if (scoreEl) scoreEl.textContent = record.nilai;
+  if (correctEl) correctEl.textContent = record.benar;
+
+  if (record.nilai >= 75) {
+    if (headingEl) headingEl.textContent = 'Luar Biasa, Kamu Lulus Kompeten!';
+    if (subtextEl) subtextEl.textContent = `Selamat kepada ${record.nama} (${record.kelas}), pemahamanmu mengenai Sistem Komputer telah tuntas memenuhi KKM.`;
+    if (badgeIcon) {
+      badgeIcon.className = 'w-20 h-20 mx-auto rounded-3xl bg-emerald-500 text-white flex items-center justify-center text-4xl shadow-lg shadow-emerald-500/30';
+      badgeIcon.innerHTML = '<i class="fa-solid fa-award"></i>';
+    }
     if (certBtn) certBtn.classList.remove('hidden');
     playFanfareSound();
     triggerConfetti();
   } else {
-    msg.textContent = 'Tetap Semangat, Belum Mencapai KKM';
-    sub.textContent = 'Jangan menyerah! Nilai KKM adalah 75. Pelajari kembali materi modul dan coba lagi ya!';
-    iconBox.className = 'w-20 h-20 mx-auto rounded-3xl bg-amber-500 text-white flex items-center justify-center text-4xl shadow-lg shadow-amber-500/30';
-    iconBox.innerHTML = '<i class="fa-solid fa-book-open-reader"></i>';
+    if (headingEl) headingEl.textContent = 'Tetap Semangat, Nilai Belum Mencapai KKM';
+    if (subtextEl) subtextEl.textContent = `Nilai KKM adalah 75. Pelajari kembali materi sistem komputer melalui lembar modul dan pembahasan di bawah ini.`;
+    if (badgeIcon) {
+      badgeIcon.className = 'w-20 h-20 mx-auto rounded-3xl bg-amber-500 text-white flex items-center justify-center text-4xl shadow-lg shadow-amber-500/30';
+      badgeIcon.innerHTML = '<i class="fa-solid fa-book-open-reader"></i>';
+    }
     if (certBtn) certBtn.classList.add('hidden');
     playWrongSound();
   }
 
-  // Populate Review List
-  buildQuizReviewList();
+  // Bangun Lembar Pembahasan 10 Soal
+  buildQuizSheetReview(record);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function buildQuizReviewList() {
+// Membuka Tampilan Hasil Sebelumnya dari Layar Terkunci
+function showPreviousResultView() {
+  try {
+    const rawData = localStorage.getItem('sk8_quiz_data');
+    if (rawData) {
+      const data = JSON.parse(rawData);
+      displayQuizResult(data);
+    }
+  } catch (err) {
+    console.error('Gagal menampilkan hasil:', err);
+  }
+}
+
+// Bangun Lembar Pembahasan 10 Soal Secara Rinci
+function buildQuizSheetReview(record) {
   const container = document.getElementById('quizReviewList');
   if (!container) return;
   container.innerHTML = '';
 
-  QUIZ_QUESTIONS.forEach((q, idx) => {
-    const userAns = userAnswers[idx];
-    const isCorrect = userAns && userAns.isCorrect;
-    const selectedIdx = userAns ? userAns.selected : -1;
+  const questions = record.active_questions || activeSheetQuestions;
+  const answers = record.student_answers || studentSelectedAnswers;
+
+  questions.forEach(q => {
+    const studentChoice = answers[q.index];
+    const isCorrect = studentChoice === q.correctLetter;
 
     const row = document.createElement('div');
-    row.className = `p-4 rounded-xl border text-xs space-y-1.5 ${
+    row.className = `p-4 sm:p-5 rounded-2xl border text-xs sm:text-sm space-y-2 ${
       isCorrect
-        ? 'bg-emerald-50/60 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-800'
-        : 'bg-rose-50/60 dark:bg-rose-950/20 border-rose-200 dark:border-rose-800'
+        ? 'bg-emerald-50/70 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-800'
+        : 'bg-rose-50/70 dark:bg-rose-950/20 border-rose-200 dark:border-rose-800'
     }`;
+
+    // Cari teks jawaban siswa
+    const letters = ['A', 'B', 'C', 'D'];
+    const studentIdx = letters.indexOf(studentChoice);
+    const studentChoiceText = studentIdx >= 0 ? q.options[studentIdx] : '-';
 
     row.innerHTML = `
       <div class="flex items-center justify-between font-bold">
-        <span>Soal ${idx + 1}: ${q.category}</span>
-        <span class="${isCorrect ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}">
-          ${isCorrect ? '<i class="fa-solid fa-check mr-1"></i> Benar' : '<i class="fa-solid fa-xmark mr-1"></i> Salah'}
+        <span class="text-slate-800 dark:text-slate-200">Soal ${q.index} • ${q.category}</span>
+        <span class="${isCorrect ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'} font-extrabold flex items-center gap-1">
+          ${isCorrect ? '<i class="fa-solid fa-circle-check"></i> Jawabanmu Benar' : '<i class="fa-solid fa-circle-xmark"></i> Kurang Tepat'}
         </span>
       </div>
-      <p class="text-slate-700 dark:text-slate-300 font-semibold">${q.question}</p>
-      <div class="text-slate-500 text-[11px]">
-        Jawabanmu: <span class="font-bold">${selectedIdx >= 0 ? q.options[selectedIdx] : '-'}</span>
+      
+      <p class="font-bold text-slate-800 dark:text-slate-100">${q.question}</p>
+      
+      <div class="space-y-1 text-xs pt-1">
+        <div class="text-slate-600 dark:text-slate-300">
+          Pilihan Kamu: <strong class="${isCorrect ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}">(${studentChoice}) ${studentChoiceText}</strong>
+        </div>
+        ${!isCorrect ? `
+          <div class="text-emerald-600 dark:text-emerald-400 font-bold">
+            Kunci Jawaban yang Benar: (${q.correctLetter}) ${q.correctAnswer}
+          </div>
+        ` : ''}
       </div>
-      ${!isCorrect ? `<div class="text-emerald-600 dark:text-emerald-400 text-[11px] font-bold">Kunci Jawaban: ${q.options[q.correct]}</div>` : ''}
-      <div class="text-slate-600 dark:text-slate-400 text-[11px] pt-1 border-t border-slate-200 dark:border-slate-700">
-        <em>Pembahasan:</em> ${q.explanation}
+
+      <div class="text-slate-600 dark:text-slate-400 text-xs pt-2 border-t border-slate-200 dark:border-slate-700/80 leading-relaxed">
+        <strong>Pembahasan:</strong> ${q.explanation}
       </div>
     `;
 
@@ -976,24 +1254,132 @@ function toggleReviewSection() {
   if (el) el.classList.toggle('hidden');
 }
 
-function quitQuiz() {
+// ================= RESET PERANGKAT (KHUSUS GURU) =================
+function promptTeacherReset() {
   playClickSound();
-  if (confirm('Yakin ingin membatalkan kuis dan kembali ke menu awal?')) {
-    document.getElementById('quizPlayScreen').classList.add('hidden');
-    document.getElementById('quizResultScreen').classList.add('hidden');
-    document.getElementById('quizStartScreen').classList.remove('hidden');
+  const inputPin = prompt('PENGATURAN GURU / PENGAWAS:\nMasukkan PIN Guru untuk mereset batasan 1 perangkat:', '');
+  if (inputPin === null) return;
+
+  if (inputPin.trim() === TEACHER_RESET_PIN) {
+    localStorage.removeItem('sk8_quiz_submitted');
+    localStorage.removeItem('sk8_quiz_data');
+    alert('Akses perangkat berhasil di-reset! Siswa baru sekarang dapat mengerjakan kuis di perangkat ini.');
+    activeSheetQuestions = [];
+    studentSelectedAnswers = {};
+    initQuizView();
+  } else {
+    alert('PIN Guru yang dimasukkan salah! Akses ditolak.');
+    playWrongSound();
   }
+}
+
+// ================= PENGATURAN GOOGLE SHEET (MODAL GURU) =================
+function openTeacherConfigModal() {
+  playClickSound();
+  const modal = document.getElementById('teacherConfigModal');
+  const urlInput = document.getElementById('teacherGasUrlInput');
+  const savedUrl = localStorage.getItem('sk8_gas_url') || '';
+  if (urlInput) urlInput.value = savedUrl;
+  if (modal) modal.classList.remove('hidden');
+}
+
+function closeTeacherConfigModal() {
+  playClickSound();
+  const modal = document.getElementById('teacherConfigModal');
+  if (modal) modal.classList.add('hidden');
+}
+
+function saveTeacherGasUrl() {
+  playClickSound();
+  const urlInput = document.getElementById('teacherGasUrlInput');
+  if (!urlInput) return;
+
+  const url = urlInput.value.trim();
+  if (url && !url.startsWith('https://script.google.com/')) {
+    alert('Peringatan: URL harus berawalan "https://script.google.com/.../exec" dari Google Apps Script Web App!');
+    return;
+  }
+
+  localStorage.setItem('sk8_gas_url', url);
+  alert(url ? 'URL Google Apps Script berhasil disimpan! Kuis kini terhubung ke spreadsheet Anda.' : 'URL dikosongkan.');
+  closeTeacherConfigModal();
+}
+
+function copyGasCodeToClipboard() {
+  playClickSound();
+  const sampleCode = `// KODE GOOGLE APPS SCRIPT UNTUK REKAP KUIS KELAS 8 BAB 4
+function doPost(e) {
+  var lock = LockService.getScriptLock();
+  lock.tryLock(10000);
+  try {
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    if (sheet.getLastRow() === 0) {
+      sheet.appendRow(["Waktu Pengiriman", "Nama Siswa", "Kelas", "No Absen", "Nilai", "Jumlah Benar"]);
+      sheet.getRange(1, 1, 1, 6).setFontWeight("bold").setBackground("#4f46e5").setFontColor("#ffffff").setHorizontalAlignment("center");
+      sheet.setFrozenRows(1);
+    }
+    var data = JSON.parse(e.postData.contents);
+    sheet.appendRow([
+      data.timestamp || new Date(),
+      data.nama || "",
+      data.kelas || "",
+      data.no_absen || "",
+      data.nilai || 0,
+      (data.benar || 0) + "/" + (data.total || 10)
+    ]);
+    var lastRow = sheet.getLastRow();
+    sheet.getRange(lastRow, 3, 1, 4).setHorizontalAlignment("center");
+    return ContentService.createTextOutput(JSON.stringify({ status: "success" })).setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({ status: "error", message: err.toString() })).setMimeType(ContentService.MimeType.JSON);
+  } finally {
+    lock.releaseLock();
+  }
+}`;
+
+  navigator.clipboard.writeText(sampleCode)
+    .then(() => {
+      const btn = document.getElementById('btnCopyGasCode');
+      if (btn) btn.innerHTML = '<i class="fa-solid fa-check mr-1"></i> Tersalin ke Clipboard!';
+      setTimeout(() => {
+        if (btn) btn.innerHTML = '<i class="fa-regular fa-copy mr-1"></i> Salin Kode Google Apps Script';
+      }, 2500);
+    })
+    .catch(() => {
+      alert('Gagal menyalin kode otomatis. Anda dapat membukanya langsung di file google_apps_script.js.');
+    });
 }
 
 // ================= SERTIFIKAT KELULUSAN =================
 function showCertificateModal() {
   playClickSound();
-  const studentName = localStorage.getItem('sk8_student_name') || 'Siswa Berprestasi';
-  const finalScoreEl = document.getElementById('quizFinalScore');
-  const score = finalScoreEl ? finalScoreEl.textContent : '100';
+  let studentName = 'Siswa Berprestasi';
+  let studentClass = '8-A';
+  let studentNo = '01';
+  let score = '100';
+
+  try {
+    const rawData = localStorage.getItem('sk8_quiz_data');
+    if (rawData) {
+      const data = JSON.parse(rawData);
+      studentName = data.nama || studentName;
+      studentClass = data.kelas || studentClass;
+      studentNo = data.no_absen || studentNo;
+      score = data.nilai !== undefined ? data.nilai : score;
+    } else {
+      studentName = localStorage.getItem('sk8_student_name') || studentName;
+      studentClass = localStorage.getItem('sk8_student_class') || studentClass;
+      studentNo = localStorage.getItem('sk8_student_no') || studentNo;
+    }
+  } catch (e) {
+    console.error(e);
+  }
 
   const nameEl = document.getElementById('certStudentName');
   if (nameEl) nameEl.textContent = studentName;
+
+  const classNoEl = document.getElementById('certStudentClassNo');
+  if (classNoEl) classNoEl.textContent = `Kelas ${studentClass} • No. Absen ${studentNo}`;
 
   const scoreEl = document.getElementById('certScoreDisplay');
   if (scoreEl) scoreEl.textContent = `${score} / 100`;
@@ -1095,6 +1481,65 @@ function filterGlossary() {
   renderGlossary(filtered);
 }
 
+// ================= POPUP DETAIL MATERI =================
+function openMateriPopup(title, category, type, description, localImg, fallbackImg, examples) {
+  playClickSound();
+  const modal = document.getElementById('materiPopupModal');
+  const img = document.getElementById('popupImg');
+  const titleEl = document.getElementById('popupTitle');
+  const catEl = document.getElementById('popupCategory');
+  const descEl = document.getElementById('popupDesc');
+  const exEl = document.getElementById('popupExamples');
+
+  if (img) {
+    img.src = localImg || fallbackImg;
+    img.onerror = () => {
+      img.src = fallbackImg;
+      img.onerror = null;
+    };
+    img.alt = title;
+  }
+  if (titleEl) titleEl.textContent = title;
+  if (catEl) {
+    catEl.textContent = category;
+    const colorMap = {
+      input: 'bg-indigo-600',
+      process: 'bg-cyan-600',
+      output: 'bg-emerald-600',
+      storage: 'bg-amber-600',
+      software: 'bg-purple-600'
+    };
+    catEl.className = `px-2.5 py-1 rounded-full text-[11px] font-bold text-white ${colorMap[type] || 'bg-indigo-600'}`;
+  }
+  if (descEl) descEl.textContent = description;
+  if (exEl) exEl.textContent = examples;
+
+  if (modal) {
+    modal.classList.remove('hidden');
+    document.body.classList.add('overflow-hidden');
+  }
+}
+
+function closeMateriPopup(event) {
+  if (event && event.target !== document.getElementById('materiPopupModal')) return;
+  playClickSound();
+  const modal = document.getElementById('materiPopupModal');
+  if (modal) {
+    modal.classList.add('hidden');
+    document.body.classList.remove('overflow-hidden');
+  }
+}
+
+// Close popup with Escape key
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    const modal = document.getElementById('materiPopupModal');
+    if (modal && !modal.classList.contains('hidden')) {
+      closeMateriPopup();
+    }
+  }
+});
+
 // ================= CONFETTI HELPER =================
 function triggerConfetti() {
   if (typeof confetti === 'function') {
@@ -1112,11 +1557,22 @@ window.addEventListener('DOMContentLoaded', () => {
   initSortGame();
   updateBinaryUI();
   initGlossary();
+  initQuizView();
 
-  // Load saved student name if any
+  // Load saved student identity if any
   const savedName = localStorage.getItem('sk8_student_name');
   if (savedName) {
-    const input = document.getElementById('studentNameInput');
-    if (input) input.value = savedName;
+    const nameInput = document.getElementById('quizStudentName');
+    if (nameInput) nameInput.value = savedName;
+  }
+  const savedClass = localStorage.getItem('sk8_student_class');
+  if (savedClass) {
+    const classInput = document.getElementById('quizStudentClass');
+    if (classInput) classInput.value = savedClass;
+  }
+  const savedNo = localStorage.getItem('sk8_student_no');
+  if (savedNo) {
+    const noInput = document.getElementById('quizStudentNumber');
+    if (noInput) noInput.value = savedNo;
   }
 });
