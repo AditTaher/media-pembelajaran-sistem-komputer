@@ -123,11 +123,14 @@ function updateThemeIcon(isDark) {
 }
 
 // ================= NAVIGATION / TABS =================
-function switchTab(tabId) {
-  playClickSound();
+function switchTab(tabId, playSound = true) {
+  if (playSound) playClickSound();
+
   // Hide all tab panes
-  document.querySelectorAll('.tab-pane').forEach(el => el.classList.add('hidden'));
-  document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-pane').forEach(el => {
+    el.classList.add('hidden');
+    el.classList.remove('active');
+  });
 
   // Show selected tab pane
   const targetPane = document.getElementById(`tab-${tabId}`);
@@ -141,6 +144,11 @@ function switchTab(tabId) {
   const activeBtn = document.getElementById(`nav-${tabId}`);
   if (activeBtn) activeBtn.classList.add('active');
 
+  // Update browser hash so URL can be copied/shared directly without reload
+  if (window.location.hash !== `#${tabId}` && window.history && window.history.replaceState) {
+    window.history.replaceState(null, '', `#${tabId}`);
+  }
+
   // If opening quiz, initialize quiz view
   if (tabId === 'kuis') {
     initQuizView();
@@ -148,6 +156,28 @@ function switchTab(tabId) {
 
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
+
+// Handle Direct Link via URL Hash (#kuis) or Query Param (?tab=kuis)
+function handleInitialRoute() {
+  const hash = (window.location.hash || '').replace('#', '').toLowerCase();
+  const urlParams = new URLSearchParams(window.location.search);
+  const tabParam = (urlParams.get('tab') || urlParams.get('page') || '').toLowerCase();
+  const targetTab = hash || tabParam;
+
+  const validTabs = ['beranda', 'materi', 'lab', 'kuis', 'glosarium'];
+  if (targetTab && validTabs.includes(targetTab)) {
+    switchTab(targetTab, false);
+  }
+}
+
+// Listen to Hash Changes (Browser Back/Forward buttons or direct hash clicks)
+window.addEventListener('hashchange', () => {
+  const hash = (window.location.hash || '').replace('#', '').toLowerCase();
+  const validTabs = ['beranda', 'materi', 'lab', 'kuis', 'glosarium'];
+  if (hash && validTabs.includes(hash)) {
+    switchTab(hash, false);
+  }
+});
 
 function toggleMobileMenu() {
   const menu = document.getElementById('mobileMenu');
@@ -1280,6 +1310,13 @@ function openTeacherConfigModal() {
   const urlInput = document.getElementById('teacherGasUrlInput');
   const savedUrl = localStorage.getItem('sk8_gas_url') || '';
   if (urlInput) urlInput.value = savedUrl;
+
+  const directUrlInput = document.getElementById('teacherDirectQuizUrlDisplay');
+  if (directUrlInput) {
+    const currentBase = window.location.href.split('#')[0].split('?')[0];
+    directUrlInput.value = `${currentBase}#kuis`;
+  }
+
   if (modal) modal.classList.remove('hidden');
 }
 
@@ -1287,6 +1324,44 @@ function closeTeacherConfigModal() {
   playClickSound();
   const modal = document.getElementById('teacherConfigModal');
   if (modal) modal.classList.add('hidden');
+}
+
+// ================= SALIN LINK DIRECT KUIS =================
+function copyQuizDirectLink() {
+  playClickSound();
+  const currentBase = window.location.href.split('#')[0].split('?')[0];
+  const directQuizUrl = `${currentBase}#kuis`;
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(directQuizUrl)
+      .then(() => {
+        showQuizCopyFeedback();
+      })
+      .catch(() => {
+        prompt('Salin tautan langsung kuis berikut:', directQuizUrl);
+      });
+  } else {
+    prompt('Salin tautan langsung kuis berikut:', directQuizUrl);
+  }
+}
+
+function showQuizCopyFeedback() {
+  const btns = [
+    document.getElementById('btnCopyQuizLink'),
+    document.getElementById('btnCopyQuizLinkModal')
+  ];
+
+  btns.forEach(btn => {
+    if (btn) {
+      const origHtml = btn.innerHTML;
+      btn.innerHTML = `<i class="fa-solid fa-check text-emerald-500 mr-1.5"></i><span>Link Tersalin!</span>`;
+      btn.classList.add('ring-2', 'ring-emerald-400');
+      setTimeout(() => {
+        btn.innerHTML = origHtml;
+        btn.classList.remove('ring-2', 'ring-emerald-400');
+      }, 2500);
+    }
+  });
 }
 
 function saveTeacherGasUrl() {
@@ -1558,6 +1633,7 @@ window.addEventListener('DOMContentLoaded', () => {
   updateBinaryUI();
   initGlossary();
   initQuizView();
+  handleInitialRoute();
 
   // Load saved student identity if any
   const savedName = localStorage.getItem('sk8_student_name');

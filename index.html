@@ -1520,7 +1520,11 @@
               Kerjakan 10 butir soal pilihan ganda di bawah ini. Pastikan data identitas siswa terisi dengan benar.
             </p>
           </div>
-          <div class="flex-shrink-0">
+          <div class="flex-shrink-0 flex items-center flex-wrap gap-2">
+            <button onclick="copyQuizDirectLink()" id="btnCopyQuizLink" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 hover:bg-indigo-100 dark:hover:bg-indigo-900 text-indigo-700 dark:text-indigo-300 text-xs font-semibold border border-indigo-200 dark:border-indigo-800 shadow-sm transition-all">
+              <i class="fa-solid fa-share-nodes text-indigo-600 dark:text-indigo-400"></i>
+              <span>Bagikan Link Kuis</span>
+            </button>
             <button onclick="openTeacherConfigModal()" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold border border-slate-200 dark:border-slate-700 shadow-sm transition-all">
               <i class="fa-solid fa-file-excel text-emerald-600"></i>
               <span>Hubungkan Sheet (Guru)</span>
@@ -1870,6 +1874,24 @@
           <i class="fa-regular fa-copy"></i>
           <span>Salin Kode Google Apps Script</span>
         </button>
+      </div>
+
+      <!-- Tautan Langsung Khusus Kuis -->
+      <div class="p-4 rounded-2xl bg-indigo-50/70 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900/60 text-xs space-y-2">
+        <div class="font-bold text-indigo-700 dark:text-indigo-300 flex items-center justify-between">
+          <span class="flex items-center gap-1.5"><i class="fa-solid fa-share-nodes"></i> Link Khusus Kuis (Direct Link)</span>
+          <span class="text-[10px] px-2 py-0.5 rounded-full bg-indigo-200 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200 font-semibold">Siap Dibagikan</span>
+        </div>
+        <p class="text-slate-600 dark:text-slate-300 text-[11px] leading-relaxed">
+          Kirim link ini ke siswa (via WhatsApp / Classroom). Siswa yang mengeklik link ini akan langsung dibawa ke lembar Kuis tanpa harus masuk ke Beranda:
+        </p>
+        <div class="flex items-center gap-2">
+          <input type="text" id="teacherDirectQuizUrlDisplay" readonly onclick="this.select()" class="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-indigo-200 dark:border-indigo-800 text-[11px] font-mono text-slate-700 dark:text-slate-200 focus:outline-none select-all shadow-inner">
+          <button onclick="copyQuizDirectLink()" id="btnCopyQuizLinkModal" class="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs whitespace-nowrap transition-all shadow-sm flex items-center gap-1.5">
+            <i class="fa-regular fa-copy"></i>
+            <span>Salin</span>
+          </button>
+        </div>
       </div>
 
       <!-- Action Buttons -->
